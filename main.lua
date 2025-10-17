@@ -1,38 +1,43 @@
 suits = {'clubs', 'diamonds', 'hearts', 'spades'}
-suit_mappings = {clubs=15, diamonds=16, hearts=17, spades=18}
+suit_mappings = {clubs=16, diamonds=17, hearts=18, spades=19}
 
 function create_deck()
 	deck = {}
 	for i=1, #suits do
-		for j=1, 52 do
+		for j=1, 13 do
 			add(deck, {suit=suits[i], val=j})
-			print(deck[j]['suit'])
 		end
 	end
 	return deck
 end
 
+--[[
+1,1  1,9   1,18
+9,1  9,9   9,18
+18,1 18,9 18,18
+--]]
+
 function draw_card()
   	local card = rnd(deck)
-  	local sprite_index = 0
-  	for row=1, 5 do
-    	for col=1, 3 do 
-      		if (col == 1 and row == 1) or (col == 5 and row == 3) then
-        		sprite_index = card['suit']
+  	for col=1, 3 do
+    	for row=1, 5 do 
+      		if (col == 3 and row == 1) or (col == 1 and row == 5) then
+        		sprite_index = suit_mappings[card.suit]
+				print(suit_mappings[card.suit])
 	  		elseif col == 2 and row == 3 then 
-				sprite_index = card['val']
-			end 
-			spr(card.sprite_index, row, col)
+				sprite_index = card.val
+			else
+				sprite_index = 0
+			end
+			spr(sprite_index, col*8, row*8)
 		end
 	end
 end
 
 function _init()
-	deck = create_deck()
-	card = draw_card()
-	print(deck[0]['suit'])
-	--print(card['suit'])
-	--print(card['val'])
+	cls()
+	create_deck()
+	draw_card()
 end
 function _update()
 	-- cls()
