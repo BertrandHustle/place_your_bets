@@ -17,27 +17,23 @@ end
 18,1 18,9 18,18
 --]]
 
-function draw_card()
+function draw_card(init_x, init_y)
   	local card = rnd(deck)
-  	for col=1, 3 do
-    	for row=1, 5 do 
-      		if (col == 3 and row == 1) or (col == 1 and row == 5) then
-        		sprite_index = suit_mappings[card.suit]
-				print(suit_mappings[card.suit])
-	  		elseif col == 2 and row == 3 then 
-				sprite_index = card.val
-			else
-				sprite_index = 0
-			end
-			spr(sprite_index, col*8, row*8)
-		end
+	spr(suit_mappings[card.suit], init_x, init_y)
+	spr(card.val, init_x, init_y*8)
+end
+
+function draw_hand(init_x, init_y)
+	for i=1,5 do
+		draw_card(init_x, init_y)
+		init_x += 9
 	end
 end
 
 function _init()
 	cls()
 	create_deck()
-	draw_card()
+	draw_hand(1, 1)
 end
 function _update()
 	-- cls()
