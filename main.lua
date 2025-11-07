@@ -55,7 +55,9 @@ poker_buttons = {
 
 function render_all_poker_buttons()
 	for _, val in pairs(poker_buttons) do
-		spr(val.sprite_val, val.x_coord, 20)
+		if val.x_coord then
+			spr(val.sprite_val, val.x_coord, 20)
+		end
 	end
 end
 
@@ -74,13 +76,13 @@ function highlight_poker_button()
 	palt(0, false)
 	rerender_poker_button(button_names[current_position])
 	palt(0, true)
-	if btnp(0) then --left
+	if btnp(0) then --left arrow
 		if current_position == 1 then 
 			current_position = 3
 		else 
 			current_position -= 1 
 		end
-	elseif btnp(1) then --right
+	elseif btnp(1) then --right arrow
 		if current_position == 3 then 
 			current_position = 1
 		else 
@@ -98,7 +100,6 @@ function _init()
 	render_all_poker_buttons()
 end
 function _update()
-	--cls()
 	highlight_poker_button()
 end
 function _draw()
