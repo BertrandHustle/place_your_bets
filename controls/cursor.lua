@@ -1,56 +1,67 @@
 Button = {
-
+    action = nil, 
+    name = '', 
+    sprite_val = 0, 
+    x_coord = 0,
+    y_coord = 0
 }
 
-poker_buttons = {
-	add_card = {sprite_val = 20, x_coord = 1},
-	remove_card = {sprite_val = 21, x_coord = 12},
-	go = {sprite_val = 22, x_coord = 24},
-	highlight = {sprite_val = 23, x_coord = nil}
-}
+highlight_sprite_val = 23
 
-function render_all_poker_buttons()
-	for _, val in pairs(poker_buttons) do
-		if val.x_coord then
-			spr(val.sprite_val, val.x_coord, 20)
-		end
-	end
+
+function Button:new(action, name, sprite_val, x_coord, y_coord)
+    local obj = {action=action, name, sprite_val=sprite_val, x_coord=x_coord, y_coord=y_coord}
+	return setmetatable(obj, {__index = self})
 end
 
-function rerender_poker_button(button_name)
-	button = poker_buttons[button_name]
-	spr(button.sprite_val, button.x_coord, 20)
-end
+function Button:render()
+    palt(0, false)
+    spr(self.sprite_val, self.x_coord, self.y_coord)
+    palt(0, true)
 
-current_position = 1
 
-function highlight_poker_button()
+function move_cursor(element_groups)
+    group_ix = 1
+    element_ix = 1
 
-	button_names = {'add_card', 'remove_card', 'go'}
+    group = element_groups[group_ix]
 
-	base_y_position = 20
-	palt(0, false)
-	rerender_poker_button(button_names[current_position])
-	palt(0, true)
 	if btnp(0) then --left arrow
-		if current_position == 1 then 
-			current_position = 3
+		if element_ix == 1 then 
+            element_ix = #group
 		else 
-			current_position -= 1 
+			element_ix -= 1
 		end
 	elseif btnp(1) then --right arrow
-		if current_position == 3 then 
-			current_position = 1
+		if element_ix == #group then 
+            element_ix = 1
 		else 
-			current_position += 1 
+			element_ix += 1
 		end
 	end
-	button_name = button_names[current_position]
-	spr(poker_buttons.highlight.sprite_val, poker_buttons[button_name].x_coord, base_y_position)
+    elseif btnp(2) then --up arrow
+		if group_ix == 1 then 
+            group_ix = #element_groups
+		else 
+			group_ix -= 1
+		end
+        group = element_groups[group_ix]
+	end
+    elseif btnp(3) then --down arrow
+		if group_ix == #element_groups then 
+            group_ix = 1
+		else 
+			group_ix += 1
+		end
+        group = element_groups[group_ix]
+	end
+    selected_element = group[element_ix]
+	spr(highlight_sprite_val, selected_element.x_coord, selected_element.y_coord)
 end
+
 
 function select_poker_button()
 	if btnp(4) then  --O button
-
+        poker_buttons[current_position].action()
 	end
 end
