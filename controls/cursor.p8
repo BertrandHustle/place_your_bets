@@ -1,29 +1,8 @@
-Button = {
-    action = nil, 
-    name = '', 
-    sprite_val = 0, 
-    x_coord = 0,
-    y_coord = 0
-}
-
-highlight_sprite_val = 23
-
-
-function Button:new(action, name, sprite_val, x_coord, y_coord)
-    local obj = {action=action, name, sprite_val=sprite_val, x_coord=x_coord, y_coord=y_coord}
-	return setmetatable(obj, {__index = self})
-end
-
-function Button:render()
-    palt(0, false)
-    spr(self.sprite_val, self.x_coord, self.y_coord)
-    palt(0, true)
+group_ix = 1
+element_ix = 1
 
 
 function move_cursor(element_groups)
-    group_ix = 1
-    element_ix = 1
-
     group = element_groups[group_ix]
 
 	if btnp(0) then --left arrow
@@ -38,16 +17,16 @@ function move_cursor(element_groups)
 		else 
 			element_ix += 1
 		end
-	end
     elseif btnp(2) then --up arrow
+		element_ix = 1  --TODO: make this calc middle of next group and start ix theres
 		if group_ix == 1 then 
             group_ix = #element_groups
 		else 
 			group_ix -= 1
 		end
         group = element_groups[group_ix]
-	end
     elseif btnp(3) then --down arrow
+		element_ix = 1
 		if group_ix == #element_groups then 
             group_ix = 1
 		else 
@@ -56,12 +35,16 @@ function move_cursor(element_groups)
         group = element_groups[group_ix]
 	end
     selected_element = group[element_ix]
-	spr(highlight_sprite_val, selected_element.x_coord, selected_element.y_coord)
-end
-
-
-function select_poker_button()
-	if btnp(4) then  --O button
-        poker_buttons[current_position].action()
+	if not selected_element == nil then
+		--selected_element:render()
+		selected_element:highlight()
+		print(selected_element.sprite_val)
 	end
 end
+
+
+-- function select_poker_button()
+-- 	if btnp(4) then  --O button
+--         poker_buttons[current_position].action()
+-- 	end
+-- end

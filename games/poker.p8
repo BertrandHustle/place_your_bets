@@ -10,9 +10,10 @@ Card = {
 }
 
 poker_accept_button = Button:new(nil, 'go', 20, 1, 20)
-poker_accept_button.render()
+poker_accept_button:render()
+poker_buttons = {poker_accept_button}
 hand = {}
-board = {hand, poker_accept_button} --contains all selectable elements
+poker_board = {hand, poker_buttons} --contains all selectable elements
 
 
 function Card:new(suit, value)
@@ -49,5 +50,12 @@ function draw_hand(init_x, init_y)
 			add(hand, card, ix)
 			init_x += 9
 		end
+	end
+end
+
+
+function render_buttons()
+	for k, pb in pairs(poker_buttons) do
+		pb:render()
 	end
 end

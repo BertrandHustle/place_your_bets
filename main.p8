@@ -1,13 +1,14 @@
 function _init()
 	cls()
 	create_deck()
-	draw_hand(1, 1)
+    draw_hand(1, 1)
+    render_buttons()
 end
 
 function _update()
-	highlight_poker_button()
+	move_cursor(poker_board)
 end
 
 function _draw()
-	-- render_card()
+	
 end
