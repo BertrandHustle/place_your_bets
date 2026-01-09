@@ -35,11 +35,8 @@ function move_cursor(element_groups)
         group = element_groups[group_ix]
 	end
     selected_element = group[element_ix]
-	if not selected_element == nil then
-		--selected_element:render()
-		selected_element:highlight()
-		print(selected_element.sprite_val)
-	end
+	selected_element.highlighted = true
+	selected_element:render()
 end
 
 

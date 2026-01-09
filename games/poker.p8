@@ -2,6 +2,7 @@ suits = {'clubs', 'diamonds', 'hearts', 'spades'}
 suit_mappings = {clubs=16, diamonds=17, hearts=18, spades=19}
 
 Card = {
+	highlighted = false,
     keep = false, 
     suit = '', 
     value = 0, 
@@ -27,6 +28,9 @@ function Card:render(init_x, init_y)
 	self.y = init_y
 	spr(suit_mappings[self.suit], self.x, self.y)
 	spr(self.value, self.x, self.y*8)
+	if self.highlighted then 
+		highlight(suit_mappings[self.suit], self.x, self.y)
+	end
 end
 
 

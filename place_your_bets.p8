@@ -4,6 +4,7 @@ __lua__
 #include main.p8
 #include UI/utils.p8
 #include UI/button.p8
+#include UI/gamesquare.p8
 #include controls/cursor.p8
 #include games/poker.p8
 __gfx__
