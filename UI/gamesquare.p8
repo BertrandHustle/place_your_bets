@@ -35,8 +35,8 @@ function GameSquare:render_border()
     line(x, y, x+e, y, color) -- top
     line(x+e, y, x+e, y+e, color) -- right
     line(x, y+e, x+e, y+e, color) -- bottom
-    print(self.name)
-    print(self.selected, x, y)
-    print(self.coord_x)
-    print(self.coord_y)
+    -- print(self.name)
+    -- print(self.selected, x, y)
+    -- print(self.coord_x)
+    -- print(self.coord_y)
 end

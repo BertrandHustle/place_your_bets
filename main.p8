@@ -22,6 +22,7 @@ function _update()
 end
 
 function _draw()
+	cls()
 	for _,row in pairs(game_squares) do 
 		for _,gs in pairs(row) do
 			gs:render_border()

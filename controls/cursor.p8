@@ -8,13 +8,18 @@ function select_game(game_squares)
 	if btnp(0) then --left
 		if(x-1 == 0) x = 1 else x -= 1
 	elseif btnp(1) then --right
-		if(x+1 == #game_squares) x = #game_squares else x += 1
+		if(x+1 > #game_squares) x = #game_squares else x += 1
     elseif btnp(2) then --up
 		if(y-1 == 0) y = 1 else y -= 1
     elseif btnp(3) then --down
-		if(y+1 == #game_squares) y = #game_squares else y += 1
+		if(y+1 > #game_squares) y = #game_squares else y += 1
 	end
-	-- selected_square.selected = false
+	
+	if (btnp(0) or btnp(1) or btnp(2) or btnp(3)) then
+		print(x)
+		print(y)
+	end
+
 	selected_square = game_squares[x][y]
 	selected_square.selected = true
 end
