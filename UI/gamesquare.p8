@@ -7,6 +7,7 @@ GameSquare = {
     init_x = 0,
     init_y = 0,
     name = '',
+    highlighted = false,
     selected = false
 }
 
@@ -30,13 +31,10 @@ function GameSquare:render_border()
     x = self.init_x
     y = self.init_y
     e = self.edge_length - 1
-    if(self.selected) color = 10 else color = 5
+    if(self.highlighted) color = 10 else color = 5
     line(x, y, x, y+e, color) -- left
     line(x, y, x+e, y, color) -- top
     line(x+e, y, x+e, y+e, color) -- right
     line(x, y+e, x+e, y+e, color) -- bottom
-    -- print(self.name)
-    -- print(self.selected, x, y)
-    -- print(self.coord_x)
-    -- print(self.coord_y)
+    print(self.selected, x, y)
 end

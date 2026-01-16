@@ -1,4 +1,5 @@
 game_squares = {}
+highlighted_square = nil
 selected_square = nil
 
 function _init()
@@ -7,7 +8,7 @@ function _init()
 	gs2 = GameSquare:new({}, 1, 2, 64, {}, 0, 64, 'test2')
 	gs3 = GameSquare:new({}, 2, 1, 64, {}, 64, 0, 'test3')
 	gs4 = GameSquare:new({}, 2, 2, 64, {}, 64, 64, 'test4')
-	selected_square = gs1
+	highlighted_square = gs1
 	row1 = {gs1, gs2}
 	row2 = {gs3, gs4}
 	add(game_squares, row1)
@@ -26,7 +27,10 @@ function _draw()
 	for _,row in pairs(game_squares) do 
 		for _,gs in pairs(row) do
 			gs:render_border()
-			if (gs.name != selected_square.name) then
+			if (gs.name != highlighted_square.name) then
+				gs.highlighted = false
+			end
+			if (selected_square and gs.name != selected_square.name) then
 				gs.selected = false
 			end
 		end
