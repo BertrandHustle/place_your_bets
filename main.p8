@@ -4,7 +4,8 @@ selected_square = nil
 
 function _init()
 	cls()
-	gs1 = GameSquare:new({}, 1, 1, 64, {}, 0, 0, 'test')
+	-- gs1 = GameSquare:new({}, 1, 1, 64, {}, 0, 0, 'test')
+	gs1 = slots_square
 	gs2 = GameSquare:new({}, 1, 2, 64, {}, 0, 64, 'test2')
 	gs3 = GameSquare:new({}, 2, 1, 64, {}, 64, 0, 'test3')
 	gs4 = GameSquare:new({}, 2, 2, 64, {}, 64, 64, 'test4')
@@ -26,7 +27,7 @@ function _draw()
 	cls()
 	for _,row in pairs(game_squares) do 
 		for _,gs in pairs(row) do
-			gs:render_border()
+			gs:render()
 			if (gs.name != highlighted_square.name) then
 				gs.highlighted = false
 			end

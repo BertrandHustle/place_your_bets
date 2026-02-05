@@ -1,5 +1,5 @@
 slots = {
-    current_bet = 0
+    current_bet = 0,
     symbols = {
         common = {
             plum = {23, 5},  -- spr, val
@@ -12,23 +12,17 @@ slots = {
         rare = {
             seven = {25, 100}
         }
-    }
-    num_reels = 3
-    reels = {}
-    rows = 3
+    },
+    num_reels = 3,
+    reels = {},
+    rows = 3,
     spin_time = 5
 }
 
 reel = {
-    symbols = {}
+    symbols = {},
     facing_symbol = nil
 }
-
-bet_button = Button:new(place_bet, 'bet', 14, 64, 64)
-spin_button = Button:new(place_bet, 'spin', 15, 64, 90)
-
-slots_square = GameSquare:new({bet_button, spin_button}, 1, 1, 64, slots.reels, 0, 0)
-add(game_squares, slots_square)
 
 function place_bet(bet) 
     slots.current_bet += bet
@@ -52,7 +46,7 @@ end
 
 
 function init()
-    for i=1, slots.num_reels
+    for i=1, slots.num_reels do
         add(slots.reels, build_reel())
     end
 end
@@ -66,3 +60,8 @@ function roll_reels()
         end
     end
 end
+
+bet_button = Button:new(place_bet, 'bet', 14, 80, 120)
+spin_button = Button:new(roll_reels, 'spin', 15, 90, 120)
+
+slots_square = GameSquare:new({bet_button, spin_button}, 1, 1, 64, slots.reels, 0, 0, 'slots')

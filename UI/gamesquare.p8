@@ -38,7 +38,6 @@ function GameSquare:render_border()
     else 
         color = 5
     end
-    print(color)
     line(x, y, x, y+e, color) -- left
     line(x, y, x+e, y, color) -- top
     line(x+e, y, x+e, y+e, color) -- right
@@ -47,7 +46,7 @@ end
 
 
 function GameSquare:render()
-    self.render_border()
+    self:render_border()
     for _, button in pairs(self.buttons) do
         button:render()
     end
