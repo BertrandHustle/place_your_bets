@@ -63,3 +63,14 @@ function render_buttons()
 		pb:render()
 	end
 end
+
+-- poker hands
+
+function pair()
+	vals = {}
+	for _, card in pairs(hand) do 
+		for _, val in vals do 
+			
+		end
+	end
+end

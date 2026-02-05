@@ -21,9 +21,11 @@ function select_game(game_squares)
 	elseif btnp(5) then --cancel
 		highlighted_square.selected = false
 		selected_square = nil
+		
 	end
 	highlighted_square = game_squares[x][y]
 	highlighted_square.highlighted = true
+	
 end
 
 
