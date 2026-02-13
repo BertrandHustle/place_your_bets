@@ -1,5 +1,7 @@
 GameSquare = {
     buttons = {},
+    x_offset = 8,
+    y_offset = 8,
     coord_x = 0,
     coord_y = 0,
     edge_length = 0,  --length of each edge of border
@@ -46,9 +48,11 @@ end
 
 
 function GameSquare:render()
+    x_offset = self.x_offset
     self:render_border()
     for _, button in pairs(self.buttons) do
-        button:render()
+        button:render(self.init_x + x_offset, self.init_y + self.edge_length - (button.h * 8) - self.y_offset)
+        x_offset += self.x_offset + button.w + x_offset
     end
     for _, piece in pairs(self.game_pieces) do
         piece:render()

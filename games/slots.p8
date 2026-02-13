@@ -61,7 +61,7 @@ function roll_reels()
     end
 end
 
-bet_button = Button:new(place_bet, 'bet', 14, 80, 120)
-spin_button = Button:new(roll_reels, 'spin', 15, 90, 120)
+bet_button = Button:new(place_bet, 'bet', 64, 2, 2)
+spin_button = Button:new(roll_reels, 'spin', 66, 2, 2)
 
 slots_square = GameSquare:new({bet_button, spin_button}, 1, 1, 64, slots.reels, 0, 0, 'slots')
