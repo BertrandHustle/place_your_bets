@@ -1,4 +1,4 @@
-function highlight(sprite_val, x, y)
+function highlight(sprite_val, x, y, w, h)
     -- https://ko-fi.com/achiegamedev
     -- draw the button sprite at x and y with a 1 pixel outline
     outline = 7
@@ -21,7 +21,7 @@ function highlight(sprite_val, x, y)
     -- which is the sprite's outline 
     for i=-thickness,thickness do
         for j=-thickness,thickness do
-            spr(sprite_val, x-i, y-j, 1, 1)
+            spr(sprite_val, x-i, y-j, w, h)
         end
     end
 
@@ -36,5 +36,5 @@ function highlight(sprite_val, x, y)
 
     -- draw the original sprite in the middle
     -- which causes the outline effect
-    spr(sprite_val, x, y, x_size, y_size)
+    spr(sprite_val, x, y, w, h)
 end

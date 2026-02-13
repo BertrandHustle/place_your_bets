@@ -16,6 +16,9 @@ end
 
 function Button:render(init_x, init_y)
     spr(self.sprite_val, init_x, init_y, self.w, self.h)
+    if self.highlighted do
+        highlight(self.sprite_val, init_x, init_y, self.w, self.h)
+    end
 end
 
 

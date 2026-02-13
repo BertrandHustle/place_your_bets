@@ -26,7 +26,9 @@ end
 function select_button(selected_square)
 	ix = 1
 	len = #selected_square.buttons
+	print(ix)
 	if btnp(0) or btnp(1) then
+		selected_square.buttons[ix].highlighted = false
 		if btnp(0) then --left
 			if(ix-1 == 0) ix = len else ix -= 1
 		elseif btnp(1) then --right

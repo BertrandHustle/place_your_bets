@@ -24,8 +24,9 @@ reel = {
     facing_symbol = nil
 }
 
-function place_bet(bet) 
-    slots.current_bet += bet
+function place_bet() 
+    slots.current_bet += 10
+    print(slots.current_bet)
 end
 
 

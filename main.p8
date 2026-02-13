@@ -20,6 +20,9 @@ function _init()
 end
 
 function _update()
+	if selected_square do
+		select_button(selected_square)
+	end
 	select_game(game_squares)
 end
 
