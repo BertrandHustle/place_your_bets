@@ -24,9 +24,8 @@ end
 
 
 function select_button(selected_square)
-	ix = 1
+	ix = selected_square.selected_button_ix
 	len = #selected_square.buttons
-	print(ix)
 	if btnp(0) or btnp(1) then
 		selected_square.buttons[ix].highlighted = false
 		if btnp(0) then --left
@@ -38,4 +37,6 @@ function select_button(selected_square)
 	elseif btnp(4) then --select
 		selected_square.buttons[ix].action()
 	end
+	selected_square.selected_button_ix = ix
+	printh(ix)
 end

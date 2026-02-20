@@ -1,5 +1,6 @@
 GameSquare = {
     buttons = {},
+    selected_button_ix = 1,
     x_offset = 8,
     y_offset = 8,
     coord_x = 0,
