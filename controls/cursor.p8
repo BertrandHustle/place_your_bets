@@ -30,13 +30,17 @@ function select_button(selected_square)
 		selected_square.buttons[ix].highlighted = false
 		if btnp(0) then --left
 			if(ix-1 == 0) ix = len else ix -= 1
+			printh('LEFT')
+			printh(ix)
 		elseif btnp(1) then --right
 			if(ix+1 > len) ix = 1 else ix += 1
+			printh('RIGHT')
+			printh(ix)
+		end
 		selected_square.buttons[ix].highlighted = true
-	end
+		printh(selected_square.buttons[ix].highlighted)
 	elseif btnp(4) then --select
 		selected_square.buttons[ix].action()
 	end
 	selected_square.selected_button_ix = ix
-	printh(ix)
 end
