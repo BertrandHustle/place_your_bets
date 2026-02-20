@@ -1,5 +1,6 @@
 slots = {
     current_bet = 0,
+    facing_symbols = {}
     symbols = {
         common = {
             -- spr, val
@@ -37,9 +38,20 @@ function Reel:render()
 end
 
 
-
 function place_bet() 
     slots.current_bet += 10
+end
+
+
+function payout()
+    prev_symbol = nil
+    for symbol, _ in pairs(slots.facing_symbols) do
+        if prev_symbol and prev_symbol != symbol then
+            return 0
+        end
+        prev_symbol = symbol
+    end
+    return slots.current_bet
 end
 
 
@@ -72,9 +84,13 @@ end
 function roll_reels()
     --for i=1, slots.spin_time do 
         for _, reel in pairs(slots.reels) do
-            reel.facing_symbol = rnd(reel)
-            spr(reel.facing_symbol[1])
+            reel.facing_symbol = rnd(reel.symbols)
+            add(slots.facing_symbols, reel.facing_symbol)
+            reel:render()
         end
+        winnings = payout()
+        pq(winnings)
+        slots.current_bet = 0
     --end
 end
 
