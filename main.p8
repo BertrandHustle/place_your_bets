@@ -5,6 +5,7 @@ selected_square = nil
 function _init()
 	cls()
 	-- gs1 = GameSquare:new({}, 1, 1, 64, {}, 0, 0, 'test')
+	init()
 	gs1 = slots_square
 	gs2 = GameSquare:new({}, 1, 2, 64, {}, 0, 64, 'test2')
 	gs3 = GameSquare:new({}, 2, 1, 64, {}, 64, 0, 'test3')
