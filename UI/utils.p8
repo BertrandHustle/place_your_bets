@@ -40,13 +40,12 @@ function highlight(sprite_val, x, y, w, h)
 end
 
 
-function gamesquare_lookup_by_name(name, gamesquares)
-    pq('starting lookup')
-    for _, gq in pairs(gamesquares) do
-        pq(gq[1].name)
-        pq(name)
-        if gq.name == name then
-            return gq
+function gamesquare_lookup_by_name(name, gq_rows)
+    for _, row in pairs(gq_rows) do 
+        for _, gq in pairs(row) do
+            if gq.name == name then
+                return gq
+            end
         end
     end
 end

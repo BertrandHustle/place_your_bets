@@ -38,20 +38,24 @@ end
 
 
 function place_bet() 
-    gamesquare_lookup_by_name('slots', game_squares)
+    gq = gamesquare_lookup_by_name('slots', game_squares)
+    gq.current_bet += 10
     player_state.money -= 10
 end
 
 
 function payout()
     prev_symbol = nil
-    for symbol, _ in pairs(slots.facing_symbols) do
+    for _, symbol in pairs(slots.facing_symbols) do
+        pq(prev_symbol)
+        pq(symbol)
         if prev_symbol and prev_symbol != symbol then
             return 0
         end
         prev_symbol = symbol
     end
-    return slots.current_bet
+    game_square = gamesquare_lookup_by_name('slots', game_squares)
+    return game_square.current_bet
 end
 
 
@@ -84,11 +88,13 @@ end
 function roll_reels()
     --for i=1, slots.spin_time do 
         for _, reel in pairs(slots.reels) do
-            reel.facing_symbol = rnd(reel.symbols)
+            --reel.facing_symbol = rnd(reel.symbols)
+            reel.facing_symbol = slots.symbols.rare[1]
             add(slots.facing_symbols, reel.facing_symbol)
             reel:render()
         end
         winnings = payout()
+        pq(winnings)
         player_state.money += winnings
         game_square = gamesquare_lookup_by_name('slots', game_squares)
         game_square.current_bet = 0

@@ -1,20 +1,24 @@
 player_state = {
 	money = 1000
 }
+
 game_squares = {}
 highlighted_square = nil
 selected_square = nil
 
 function _init()
 	cls()
-	init()  --init slots
-	game_squares = {	
-		gs1 = slots_square,
-		gs2 = GameSquare:new({}, 1, 2, 64, {}, 0, 64, 'test2'),
-		gs3 = GameSquare:new({}, 2, 1, 64, {}, 64, 0, 'test3'),
-		gs4 = GameSquare:new({}, 2, 2, 64, {}, 64, 64, 'test4')
-	}
-	highlighted_square = game_squares.gs1
+	-- gs1 = GameSquare:new({}, 1, 1, 64, {}, 0, 0, 'test')
+	init()
+	gs1 = slots_square
+	gs2 = GameSquare:new({}, 1, 2, 64, {}, 0, 64, 'test2')
+	gs3 = GameSquare:new({}, 2, 1, 64, {}, 64, 0, 'test3')
+	gs4 = GameSquare:new({}, 2, 2, 64, {}, 64, 64, 'test4')
+	highlighted_square = gs1
+	row1 = {gs1, gs2}
+	row2 = {gs3, gs4}
+	add(game_squares, row1)
+	add(game_squares, row2)
 	-- create_deck()
     -- draw_hand(1, 1)
     -- render_buttons()
@@ -29,13 +33,16 @@ end
 
 function _draw()
 	cls()
-	for _,gs in pairs(row) do
-		gs:render()
-		if (gs.name != highlighted_square.name) then
-			gs.highlighted = false
-		end
-		if (selected_square and gs.name != selected_square.name) then
-			gs.selected = false
+	print(player_state.money, 2, 2)
+	for _,row in pairs(game_squares) do 
+		for _,gs in pairs(row) do
+			gs:render()
+			if (gs.name != highlighted_square.name) then
+				gs.highlighted = false
+			end
+			if (selected_square and gs.name != selected_square.name) then
+				gs.selected = false
+			end
 		end
 	end
 end

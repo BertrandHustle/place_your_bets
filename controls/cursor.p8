@@ -18,7 +18,6 @@ function select_game(game_squares)
 		highlighted_square.selected = false
 		selected_square = nil
 	end
-	pq(game_squares)
 	highlighted_square = game_squares[x][y]
 	highlighted_square.highlighted = true
 end

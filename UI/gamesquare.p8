@@ -62,5 +62,5 @@ function GameSquare:render()
     for _, piece in pairs(self.game_pieces) do
         piece:render()
     end
-    print(self.current_bet, self.init_x + 2, self.init_y + 2)
+    print(self.current_bet, self.init_x + self.edge_length - 6, self.init_y + 2)
 end
