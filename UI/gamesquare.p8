@@ -1,6 +1,8 @@
 GameSquare = {
     buttons = {},
     current_bet = 0,
+    timer = 0,
+    time_limit = 0,
     selected_button_ix = 1,
     x_offset = 8,
     y_offset = 8,
@@ -16,7 +18,7 @@ GameSquare = {
 }
 
 
-function GameSquare:new(buttons, coord_x, coord_y, edge_length, game_pieces, init_x, init_y, name)
+function GameSquare:new(buttons, coord_x, coord_y, edge_length, game_pieces, init_x, init_y, name, time_limit)
 	local obj = {
         buttons=buttons, 
         coord_x=coord_x,
@@ -25,7 +27,9 @@ function GameSquare:new(buttons, coord_x, coord_y, edge_length, game_pieces, ini
         game_pieces=game_pieces,
         init_x=init_x, 
         init_y=init_y, 
-        name=name
+        name=name,
+        timer=time_limit,
+        time_limit=time_limit
     }
     for _, button in pairs(buttons) do
         button.gamesquare_name = name
@@ -63,4 +67,5 @@ function GameSquare:render()
         piece:render()
     end
     print(self.current_bet, self.init_x + self.edge_length - 6, self.init_y + 2)
+    print(self.timer, self.init_x + self.edge_length - 6, self.init_y + 10)
 end

@@ -40,6 +40,8 @@ end
 function place_bet() 
     gq = gamesquare_lookup_by_name('slots', game_squares)
     gq.current_bet += 10
+    pq(gq.time_limit)
+    gq.timer = gq.time_limit
     player_state.money -= 10
 end
 
@@ -47,8 +49,6 @@ end
 function payout()
     prev_symbol = nil
     for _, symbol in pairs(slots.facing_symbols) do
-        pq(prev_symbol)
-        pq(symbol)
         if prev_symbol and prev_symbol != symbol then
             return 0
         end
@@ -93,8 +93,7 @@ function roll_reels()
             add(slots.facing_symbols, reel.facing_symbol)
             reel:render()
         end
-        winnings = payout()
-        pq(winnings)
+        winnings = payout() * slots.facing_symbols[1][2]
         player_state.money += winnings
         game_square = gamesquare_lookup_by_name('slots', game_squares)
         game_square.current_bet = 0
@@ -104,4 +103,4 @@ end
 bet_button = Button:new(place_bet, 64, 2, 2)
 spin_button = Button:new(roll_reels, 66, 2, 2)
 
-slots_square = GameSquare:new({bet_button, spin_button}, 1, 1, 64, slots.reels, 0, 0, 'slots')
+slots_square = GameSquare:new({bet_button, spin_button}, 1, 1, 64, slots.reels, 0, 0, 'slots', 60)
