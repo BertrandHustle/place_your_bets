@@ -1,6 +1,5 @@
 slots = {
-    current_bet = 0,
-    facing_symbols = {}
+    facing_symbols = {},
     symbols = {
         common = {
             -- spr, val
@@ -39,7 +38,8 @@ end
 
 
 function place_bet() 
-    slots.current_bet += 10
+    gamesquare_lookup_by_name('slots', game_squares)
+    player_state.money -= 10
 end
 
 
@@ -89,12 +89,13 @@ function roll_reels()
             reel:render()
         end
         winnings = payout()
-        pq(winnings)
-        slots.current_bet = 0
+        player_state.money += winnings
+        game_square = gamesquare_lookup_by_name('slots', game_squares)
+        game_square.current_bet = 0
     --end
 end
 
-bet_button = Button:new(place_bet, 'bet', 64, 2, 2)
-spin_button = Button:new(roll_reels, 'spin', 66, 2, 2)
+bet_button = Button:new(place_bet, 64, 2, 2)
+spin_button = Button:new(roll_reels, 66, 2, 2)
 
 slots_square = GameSquare:new({bet_button, spin_button}, 1, 1, 64, slots.reels, 0, 0, 'slots')

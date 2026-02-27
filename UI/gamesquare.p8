@@ -1,5 +1,6 @@
 GameSquare = {
     buttons = {},
+    current_bet = 0,
     selected_button_ix = 1,
     x_offset = 8,
     y_offset = 8,
@@ -26,6 +27,9 @@ function GameSquare:new(buttons, coord_x, coord_y, edge_length, game_pieces, ini
         init_y=init_y, 
         name=name
     }
+    for _, button in pairs(buttons) do
+        button.gamesquare_name = name
+    end
 	return setmetatable(obj, {__index = self})
 end
 
@@ -58,4 +62,5 @@ function GameSquare:render()
     for _, piece in pairs(self.game_pieces) do
         piece:render()
     end
+    print(self.current_bet, self.init_x + 2, self.init_y + 2)
 end
