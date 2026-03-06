@@ -14,7 +14,9 @@ GameSquare = {
     init_y = 0,
     name = '',
     highlighted = false,
-    selected = false
+    selected = false,
+    win = false,
+    win_frames = 0
 }
 
 
@@ -42,17 +44,17 @@ function GameSquare:render_border()
     x = self.init_x
     y = self.init_y
     e = self.edge_length - 1
-    if(self.selected) then 
+    if(self.win) then
+        color = rnd(8) + 8
+        self.win_frames += 1
+    elseif(self.selected) then 
         color = 7 
     elseif(self.highlighted) then 
         color = 10
-    else 
+    else
         color = 5
     end
-    line(x, y, x, y+e, color) -- left
-    line(x, y, x+e, y, color) -- top
-    line(x+e, y, x+e, y+e, color) -- right
-    line(x, y+e, x+e, y+e, color) -- bottom
+    rect(x, y, x+e, y+e, color)
 end
 
 
@@ -66,6 +68,12 @@ function GameSquare:render()
     for _, piece in pairs(self.game_pieces) do
         piece:render()
     end
-    print(self.current_bet, self.init_x + self.edge_length - 6, self.init_y + 2)
-    print(self.timer, self.init_x + self.edge_length - 6, self.init_y + 10)
+    print(self.current_bet, self.init_x + self.edge_length - 9, self.init_y + 2)
+    print(self.timer, self.init_x + self.edge_length - 9, self.init_y + 10)
+end
+
+
+function GameSquare:cancel_win()
+    self.win = false
+	self.win_frames = 0
 end

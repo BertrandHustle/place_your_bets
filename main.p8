@@ -26,22 +26,16 @@ function _init()
 end
 
 function _update()
-	if selected_square do
-		select_button(selected_square)
-	end
-	select_game(game_squares)
-end
-
-function _draw()
-	cls()
-	print(player_state.money, 2, 2)
 	if frames == 60 then
 		tick = true
 		frames = 0
 	end
+
 	for _,row in pairs(game_squares) do 
 		for _,gs in pairs(row) do
-			gs:render()
+			if gs.win_frames >= 20 then
+				gs:cancel_win()
+			end
 			if (gs.name != highlighted_square.name) then
 				gs.highlighted = false
 			end
@@ -53,6 +47,22 @@ function _draw()
 			end
 		end
 	end
+
+	if selected_square do
+		select_button(selected_square)
+	end
+	select_game(game_squares)
+
 	tick = false
 	frames += 1
+end
+
+function _draw()
+	cls()
+	print(player_state.money, 2, 2)
+	for _,row in pairs(game_squares) do 
+		for _,gs in pairs(row) do
+			gs:render()
+		end
+	end
 end

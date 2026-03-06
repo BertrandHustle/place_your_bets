@@ -37,9 +37,8 @@ function Reel:render()
 end
 
 
-function place_bet() 
+function place_bet()
     slots_square.current_bet += 10
-    pq(slots_square.time_limit)
     slots_square.timer = slots_square.time_limit
     player_state.money -= 10
 end
@@ -53,6 +52,8 @@ function payout()
         end
         prev_symbol = symbol
     end
+    sfx(1, -1, 0, 20)
+    slots_square.win = true
     return slots_square.current_bet
 end
 
@@ -84,7 +85,7 @@ end
 
 
 function roll_reels()
-    --for i=1, slots.spin_time do 
+    if (slots_square.current_bet > 0) then
         for _, reel in pairs(slots.reels) do
             --reel.facing_symbol = rnd(reel.symbols)
             reel.facing_symbol = slots.symbols.rare[1]
@@ -93,8 +94,8 @@ function roll_reels()
         end
         winnings = payout() * slots.facing_symbols[1][2]
         player_state.money += winnings
-        slots_square.current_bet = 0
-    --end
+        slots_square.current_bet = 0 
+    end
 end
 
 bet_button = Button:new(place_bet, 64, 2, 2)
