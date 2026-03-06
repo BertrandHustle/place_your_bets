@@ -5,7 +5,8 @@ slots = {
             -- spr, val
             {23, 5},  --plum
             {24, 4},  --lemon
-            {26, 3}  --orange
+            {26, 3},  --orange
+            {28, 1}   --cherry
         },
         uncommon = {
             {27, 50}  --diamond
@@ -60,11 +61,11 @@ end
 
 function build_reel(x, y)
     symbols = {}
-    for i=1, 14 do 
+    for i=1, 15 do 
         symbol = rnd(slots.symbols.common)
         add(symbols, symbol)
     end
-    for i=1, 2 do 
+    for i=1, 5 do 
         symbol = rnd(slots.symbols.uncommon)
         add(symbols, symbol)
     end
