@@ -60,7 +60,7 @@ end
 
 function build_reel(x, y)
     symbols = {}
-    for i=1, 7 do 
+    for i=1, 14 do 
         symbol = rnd(slots.symbols.common)
         add(symbols, symbol)
     end
@@ -87,14 +87,15 @@ end
 function roll_reels()
     if (slots_square.current_bet > 0) then
         for _, reel in pairs(slots.reels) do
-            --reel.facing_symbol = rnd(reel.symbols)
-            reel.facing_symbol = slots.symbols.rare[1]
+            reel.facing_symbol = rnd(reel.symbols)
+            --reel.facing_symbol = slots.symbols.rare[1]
             add(slots.facing_symbols, reel.facing_symbol)
             reel:render()
         end
         winnings = payout() * slots.facing_symbols[1][2]
         player_state.money += winnings
         slots_square.current_bet = 0 
+        slots.facing_symbols = {}
     end
 end
 
