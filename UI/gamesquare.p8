@@ -32,7 +32,7 @@ function GameSquare:new(buttons, coord_x, coord_y, edge_length, game_pieces, ini
         time_limit=time_limit
     }
     for _, button in pairs(buttons) do
-        button.gamesquare_name = name
+        button.parent = self
     end
 	return setmetatable(obj, {__index = self})
 end

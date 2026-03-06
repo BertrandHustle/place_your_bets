@@ -38,10 +38,9 @@ end
 
 
 function place_bet() 
-    gq = gamesquare_lookup_by_name('slots', game_squares)
-    gq.current_bet += 10
-    pq(gq.time_limit)
-    gq.timer = gq.time_limit
+    slots_square.current_bet += 10
+    pq(slots_square.time_limit)
+    slots_square.timer = slots_square.time_limit
     player_state.money -= 10
 end
 
@@ -54,8 +53,7 @@ function payout()
         end
         prev_symbol = symbol
     end
-    game_square = gamesquare_lookup_by_name('slots', game_squares)
-    return game_square.current_bet
+    return slots_square.current_bet
 end
 
 
@@ -95,8 +93,7 @@ function roll_reels()
         end
         winnings = payout() * slots.facing_symbols[1][2]
         player_state.money += winnings
-        game_square = gamesquare_lookup_by_name('slots', game_squares)
-        game_square.current_bet = 0
+        slots_square.current_bet = 0
     --end
 end
 
