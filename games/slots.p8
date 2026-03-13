@@ -75,7 +75,7 @@ function build_reel(x, y)
 end
 
 
-function init()
+function slots_init()
     x = 10
     y = 10
     for i=1, slots.num_reels do

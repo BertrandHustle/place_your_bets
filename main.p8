@@ -10,9 +10,10 @@ frames = 0
 function _init()
 	cls()
 	-- gs1 = GameSquare:new({}, 1, 1, 64, {}, 0, 0, 'test')
-	init()
+	slots_init()
+	turtle_init()
 	gs1 = slots_square
-	gs2 = GameSquare:new({}, 1, 2, 64, {}, 0, 64, 'test2', 60)
+	gs2 = turtle_square
 	gs3 = GameSquare:new({}, 2, 1, 64, {}, 64, 0, 'test3', 60)
 	gs4 = GameSquare:new({}, 2, 2, 64, {}, 64, 64, 'test4', 60)
 	highlighted_square = gs1
