@@ -1,18 +1,8 @@
 GameSquare = {
-    buttons = {},
     current_bet = 0,
-    timer = 0,
-    time_limit = 0,
     selected_button_ix = 1,
     x_offset = 8,
     y_offset = 8,
-    coord_x = 0,
-    coord_y = 0,
-    edge_length = 0,  --length of each edge of border
-    game_pieces = {},
-    init_x = 0,
-    init_y = 0,
-    name = '',
     highlighted = false,
     selected = false,
     win = false,
@@ -25,7 +15,7 @@ function GameSquare:new(buttons, coord_x, coord_y, edge_length, game_pieces, ini
         buttons=buttons, 
         coord_x=coord_x,
         coord_y=coord_y,
-        edge_length=edge_length, 
+        edge_length=edge_length,  --length of each edge of border
         game_pieces=game_pieces,
         init_x=init_x, 
         init_y=init_y, 
