@@ -7,15 +7,15 @@ Turtle = {
 turtles = {}
 
 function Turtle:new(sprite_val, odds, speed)
-	local obj = {sprite_val=sprite_val, leg_color=leg_color, odds=odds, speed=speed}
+	local obj = {sprite_val=sprite_val, odds=odds, speed=speed}
 	return setmetatable(obj, {__index = self})
 end
 
 
-function Turtle:render(x, y)
-    spr(self.sprite_val, x, y, 2, 2)
-    pq(y)
-    top_h = y+12  --height of leg top
+function Turtle:render()
+    x = self.x + self.distance
+    spr(self.sprite_val, x, self.y, 2, 2)
+    top_h = self.y+12  --height of leg top
     leg_tops = {{x+3, top_h}, {x+5, top_h}, {x+8, top_h}, {x+10, top_h}}
     leg_color = sget(x+3, top_h)
     for _, leg in pairs(leg_tops) do
@@ -27,23 +27,21 @@ end
 
 
 function Turtle:step()
-    self:render(self.x + self.distance, self.y)
+    self:render()
     self.distance += self.speed
 end
 
 
 -- TODO: change this to use meta e.g. turtle.init?
 function turtle_init() 
-    x = turtle_square.init_x
-    y = turtle_square.init_y
     y_offset = 8
     for _, spr_val in pairs(turtle_sprites) do
         add(turtles, Turtle:new(spr_val, rnd({1,2,3,4}), rnd({1,2,3,4})))
     end
     for _, turtle in pairs(turtles) do
-        turtle.x = x 
-        turtle.y = y
-        turtle:render(turtle.x + 5, turtle.y + y_offset)
+        turtle.x = turtle_square.init_x 
+        turtle.y = turtle_square.init_y + y_offset
+        turtle:render()
         y_offset += 8
     end
 end
@@ -60,4 +58,4 @@ turtle_sprites = {128, 130, 160, 162}
 
 bet_button_sprites = {1,2,3,4}
 
-turtle_square = GameSquare:new({}, 1, 2, 64, turtles, 64, 0, 'turtles', 60)
+turtle_square = GameSquare:new({}, 1, 2, 64, turtles, 0, 64, 'turtles', 60)
