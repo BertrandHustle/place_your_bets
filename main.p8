@@ -9,7 +9,7 @@ frames = 0
 
 function _init()
 	cls()
-	-- gs1 = GameSquare:new({}, 1, 1, 64, {}, 0, 0, 'test')
+	--gs2 = GameSquare:new({}, 1, 1, 64, {}, 0, 0, 'test', 60)
 	slots_init()
 	turtle_init()
 	gs1 = slots_square

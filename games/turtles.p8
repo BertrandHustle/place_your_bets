@@ -1,6 +1,5 @@
 Turtle = {
     back_leg = false,
-    distance = 0,
     winner = false
 }
 
@@ -13,21 +12,22 @@ end
 
 
 function Turtle:render()
-    x = self.x + self.distance
-    spr(self.sprite_val, x, self.y, 2, 2)
+    spr(self.sprite_val, self.x, self.y, 2, 2)
     top_h = self.y+12  --height of leg top
-    leg_tops = {{x+3, top_h}, {x+5, top_h}, {x+8, top_h}, {x+10, top_h}}
-    leg_color = sget(x+3, top_h)
+    leg_tops = {{self.x+3, top_h}, {self.x+5, top_h}, {self.x+8, top_h}, {self.x+10, top_h}}
+    leg_color = pget(self.x+3, top_h-1)
+    pq(self.x+3)
+    pq(self.y+12)
     for _, leg in pairs(leg_tops) do
-        if(self.back_leg) l=3 else l=2
-        line(leg[0], leg[1], leg[0], l, leg_color)
-        back_leg = not back_leg
+        if(self.back_leg) len=3 else len=2
+        line(leg[1], leg[2], leg[1], leg[2]+len, leg_color)
+        self.back_leg = not back_leg
     end
 end
 
 
 function Turtle:step()
-    self.distance += self.speed
+    self.x += self.speed
     self:render()
 end
 
@@ -41,7 +41,6 @@ function turtle_init()
     for _, turtle in pairs(turtles) do
         turtle.x = turtle_square.init_x 
         turtle.y = turtle_square.init_y + y_offset
-        turtle:render()
         y_offset += 8
     end
 end
