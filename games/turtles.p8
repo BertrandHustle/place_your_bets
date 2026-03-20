@@ -19,6 +19,7 @@ function Turtle:render()
     for _, leg in pairs(leg_tops) do
         if(self.back_leg) len=3 else len=2
         line(leg[1], leg[2], leg[1], leg[2]+len, leg_color)
+        sfx(0)
         self.back_leg = not self.back_leg
     end
     self.back_leg = not self.back_leg
