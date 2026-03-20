@@ -49,6 +49,12 @@ function _update()
 		end
 	end
 
+	if tick then
+		for _,turtle in pairs(turtles) do
+			turtle:step()
+		end
+	end
+
 	if selected_square do
 		select_button(selected_square)
 	end

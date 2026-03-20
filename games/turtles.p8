@@ -27,8 +27,8 @@ end
 
 
 function Turtle:step()
-    self:render()
     self.distance += self.speed
+    self:render()
 end
 
 
@@ -49,7 +49,7 @@ end
 
 function place_bet()
     turtle_square.current_bet += 10
-    turtle_square.timer = slots_square.time_limit
+    turtle_square.timer = turtle_square.time_limit
     player_state.money -= 10
 end
 
