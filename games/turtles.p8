@@ -16,13 +16,12 @@ function Turtle:render()
     top_h = self.y+12  --height of leg top
     leg_tops = {{self.x+3, top_h}, {self.x+5, top_h}, {self.x+8, top_h}, {self.x+10, top_h}}
     leg_color = pget(self.x+3, top_h-1)
-    pq(self.x+3)
-    pq(self.y+12)
     for _, leg in pairs(leg_tops) do
         if(self.back_leg) len=3 else len=2
         line(leg[1], leg[2], leg[1], leg[2]+len, leg_color)
-        self.back_leg = not back_leg
+        self.back_leg = not self.back_leg
     end
+    self.back_leg = not self.back_leg
 end
 
 

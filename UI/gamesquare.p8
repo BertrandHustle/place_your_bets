@@ -58,8 +58,8 @@ function GameSquare:render()
     for _, piece in pairs(self.game_pieces) do
         piece:render()
     end
-    print(self.current_bet, self.init_x + self.edge_length - 9, self.init_y + 2)
-    print(self.timer, self.init_x + self.edge_length - 9, self.init_y + 10)
+    print(self.current_bet, self.init_x + self.edge_length - 9, self.init_y + 2, 5)
+    print(self.timer, self.init_x + self.edge_length - 9, self.init_y + 10, 5)
 end
 
 
