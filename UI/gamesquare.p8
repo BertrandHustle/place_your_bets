@@ -10,7 +10,7 @@ GameSquare = {
 }
 
 
-function GameSquare:new(buttons, coord_x, coord_y, edge_length, game_pieces, init_x, init_y, time_limit)
+function GameSquare:new(buttons, coord_x, coord_y, edge_length, game_pieces, init_x, init_y, name, time_limit)
 	local obj = {
         buttons=buttons, 
         coord_x=coord_x,
@@ -19,6 +19,7 @@ function GameSquare:new(buttons, coord_x, coord_y, edge_length, game_pieces, ini
         game_pieces=game_pieces,
         init_x=init_x, 
         init_y=init_y, 
+        name=name,
         timer=time_limit,
         time_limit=time_limit
     }

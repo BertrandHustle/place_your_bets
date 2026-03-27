@@ -1,4 +1,4 @@
-slots = {
+Slots = {
     facing_symbols = {},
     symbols = {
         common = {
@@ -38,16 +38,16 @@ function Reel:render()
 end
 
 
-function place_bet()
+function Slots:place_bet()
     slots_square.current_bet += 10
     slots_square.timer = slots_square.time_limit
     player_state.money -= 10
 end
 
 
-function payout()
+function Slots:payout()
     prev_symbol = nil
-    for _, symbol in pairs(slots.facing_symbols) do
+    for _, symbol in pairs(Slots.facing_symbols) do
         if prev_symbol and prev_symbol != symbol then
             return 0
         end
@@ -59,51 +59,51 @@ function payout()
 end
 
 
-function build_reel(x, y)
+function Slots:build_reel(x, y)
     symbols = {}
     for i=1, 15 do 
-        symbol = rnd(slots.symbols.common)
+        symbol = rnd(Slots.symbols.common)
         add(symbols, symbol)
     end
     for i=1, 5 do 
-        symbol = rnd(slots.symbols.uncommon)
+        symbol = rnd(Slots.symbols.uncommon)
         add(symbols, symbol)
     end
-    symbol = rnd(slots.symbols.rare)
+    symbol = rnd(Slots.symbols.rare)
     add(symbols, symbol)
     return Reel:new(symbols, x, y)
 end
 
 
-function slots_init()
+function Slots:init()
     x = 10
     y = 10
-    for i=1, slots.num_reels do
-        add(slots.reels, build_reel(x, y))
+    for i=1, Slots.num_reels do
+        add(Slots.reels, Slots:build_reel(x, y))
         x += 10
     end
 end
 
 
-function roll_reels()
+function Slots:roll_reels()
     if (slots_square.current_bet > 0) then
-        for _, reel in pairs(slots.reels) do
+        for _, reel in pairs(Slots.reels) do
             reel.facing_symbol = rnd(reel.symbols)
-            --reel.facing_symbol = slots.symbols.rare[1]
-            add(slots.facing_symbols, reel.facing_symbol)
+            --reel.facing_symbol = Slots.symbols.rare[1]
+            add(Slots.facing_symbols, reel.facing_symbol)
             reel:render()
         end
-        winnings = payout() * slots.facing_symbols[1][2]
+        winnings = Slots.payout() * Slots.facing_symbols[1][2]
         player_state.money += winnings
         slots_square.current_bet = 0 
-        slots.facing_symbols = {}
+        Slots.facing_symbols = {}
     end
 end
 
 gs_x = 0
 gs_y = 0
 
-bet_button = Button:new(place_bet, 64, gs_x+10, gs_y+40, 2, 2)
-spin_button = Button:new(roll_reels, 66, gs_x+35, gs_y+40, 2, 2)
+bet_button = Button:new(Slots.place_bet, 64, gs_x+10, gs_y+40, 2, 2)
+spin_button = Button:new(Slots.roll_reels, 66, gs_x+35, gs_y+40, 2, 2)
 
-slots_square = GameSquare:new({bet_button, spin_button}, 1, 1, 64, slots.reels, gs_x, gs_y, 60)
+slots_square = GameSquare:new({bet_button, spin_button}, 1, 1, 64, Slots.reels, gs_x, gs_y, 'slots', 60)

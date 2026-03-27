@@ -9,12 +9,12 @@ frames = 0
 
 function _init()
 	cls()
-	slots_init()
-	turtle_init()
+	Slots.init()
+	Turtle.init()
 	gs1 = slots_square
 	gs2 = turtle_square
-	gs3 = GameSquare:new({}, 2, 1, 64, {}, 64, 0, 60)
-	gs4 = GameSquare:new({}, 2, 2, 64, {}, 64, 64, 60)
+	gs3 = GameSquare:new({}, 2, 1, 64, {}, 64, 0, 'test3', 60)
+	gs4 = GameSquare:new({}, 2, 2, 64, {}, 64, 64, 'test4', 60)
 	highlighted_square = gs1
 	row1 = {gs1, gs2}
 	row2 = {gs3, gs4}
@@ -48,11 +48,11 @@ function _update()
 		end
 	end
 
-	if tick then
+	if gs2.current_bet > 0 and tick then
 		for _,turtle in pairs(turtles) do
 			turtle:step()
 			if turtle.winner then
-				
+				turtle_square.payout(turtle)
 			end
 		end
 	end
