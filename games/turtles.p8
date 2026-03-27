@@ -23,6 +23,7 @@ function Turtle:render()
         self.back_leg = not self.back_leg
     end
     self.back_leg = not self.back_leg
+    spr(132, turtle_square.init_x + 54, self.y + 4) -- render finish line
 end
 
 
