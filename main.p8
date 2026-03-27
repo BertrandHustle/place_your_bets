@@ -52,7 +52,7 @@ function _update()
 		for _,turtle in pairs(turtles) do
 			turtle:step()
 			if turtle.winner then
-				turtle_square.payout(turtle)
+				Turtle:payout(turtle)
 			end
 		end
 	end
