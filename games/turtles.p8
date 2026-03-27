@@ -1,5 +1,7 @@
 Turtle = {
     back_leg = false,
+    bet_choice = false,
+    finish_line = 0,
     winner = false
 }
 
@@ -23,19 +25,23 @@ function Turtle:render()
         self.back_leg = not self.back_leg
     end
     self.back_leg = not self.back_leg
-    spr(132, turtle_square.init_x + 54, self.y + 4) -- render finish line
+    self.finish_line = turtle_square.init_x + 54
+    spr(132, self.finish_line, self.y + 4) -- render finish line
 end
 
 
 function Turtle:step()
     self.x += self.speed
     self:render()
+    if self.x == self.finish_line then
+        self.winner = true
+    end
 end
 
 
 -- TODO: change this to use meta e.g. turtle.init?
 function turtle_init() 
-    y_offset = 8
+    y_offset = 16
     for _, spr_val in pairs(turtle_sprites) do
         add(turtles, Turtle:new(spr_val, rnd({1,2,3,4}), rnd({1,2,3,4})))
     end
@@ -54,8 +60,25 @@ function place_bet()
 end
 
 
+function payout()
+    for _, turtle in turtles do
+        if turtle.bet_choice and turtle.winner then
+            player.money += turtle_square.current_bet * 4
+        end
+    end 
+end
+
+
 turtle_sprites = {128, 130, 160, 162}
 
-bet_button_sprites = {1,2,3,4}
+gs_x = 0
+gs_y = 64
 
-turtle_square = GameSquare:new({}, 1, 2, 64, turtles, 0, 64, 'turtles', 60)
+turtle_buttons = {}
+x_offset = 16
+for i=1,4 do
+    add(turtle_buttons, Button:new(place_bet, i, x_offset, gs_y + 10, 1, 1))
+    x_offset += 8
+end
+
+turtle_square = GameSquare:new(turtle_buttons, 1, 2, 64, turtles, gs_x, gs_y, 60)
