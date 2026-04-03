@@ -26,10 +26,8 @@ function _init()
 end
 
 function _update()
-	if frames == 60 then
-		tick = true
-		frames = 0
-	end
+	runtime = time()
+	sec = runtime == runtime & -1  -- check if its a float vs int
 
 	for _,row in pairs(game_squares) do 
 		for _,gs in pairs(row) do
@@ -42,17 +40,8 @@ function _update()
 			if (selected_square and gs.name != selected_square.name) then
 				gs.selected = false
 			end
-			if tick then
+			if sec then
 				gs.timer -= 1
-			end
-		end
-	end
-
-	if gs2.current_bet > 0 and tick then
-		for _,turtle in pairs(turtles) do
-			turtle:step()
-			if turtle.winner then
-				Turtle:payout(turtle)
 			end
 		end
 	end
@@ -62,7 +51,6 @@ function _update()
 	end
 	select_game(game_squares)
 
-	tick = false
 	frames += 1
 end
 
@@ -72,6 +60,14 @@ function _draw()
 	for _,row in pairs(game_squares) do 
 		for _,gs in pairs(row) do
 			gs:render()
+		end
+	end
+
+	if sec and gs2.current_bet > 0 then
+		-- pq(turtles)
+		-- pq(gs2.game_pieces)
+		for _,turtle in pairs(turtles) do
+			turtle:step()
 		end
 	end
 end

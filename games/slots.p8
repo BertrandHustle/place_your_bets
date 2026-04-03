@@ -53,8 +53,7 @@ function Slots:payout()
         end
         prev_symbol = symbol
     end
-    sfx(1, -1, 0, 20)
-    slots_square.win = true
+    slots_square:set_win()
     return slots_square.current_bet
 end
 

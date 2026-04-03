@@ -1,11 +1,12 @@
+-- TODO: remove default values?
 Turtle = {
     back_leg = false,
     bet_choice = false,
-    finish_line = 0,
-    winner = false
+    finish_line = 0
 }
 
 turtles = {}
+turtle_sprites = {128, 130, 160, 162}
 
 function Turtle:new(sprite_val, odds, speed)
 	local obj = {sprite_val=sprite_val, odds=odds, speed=speed}
@@ -14,7 +15,6 @@ end
 
 
 function Turtle:render()
-    self.finish_line = turtle_square.init_x + 54
     spr(132, self.finish_line, self.y + 4) -- render finish line
     spr(self.sprite_val, self.x, self.y, 2, 2)
     if turtle_square.current_bet > 0 then
@@ -36,12 +36,12 @@ function Turtle:step()
     self.x += self.speed
     self:render()
     if self.x + 12 >= self.finish_line then
-        self.winner = true
+        self:payout()
     end
 end
 
 
-function Turtle:init() 
+function Turtle:init()
     y_offset = 15
     for _, spr_val in pairs(turtle_sprites) do
         add(turtles, Turtle:new(spr_val, rnd({1,2,3,4}), rnd({1,2,3,4})))
@@ -49,8 +49,11 @@ function Turtle:init()
     for _, turtle in pairs(turtles) do
         turtle.x = turtle_square.init_x 
         turtle.y = turtle_square.init_y + y_offset
+        turtle.finish_line = turtle_square.init_x + 54
         y_offset += 8
+        turtle:render()
     end
+    pq(turtles)
 end
 
 
@@ -63,18 +66,18 @@ function Turtle:place_bet()
 end
 
 
-function Turtle:payout(turtle)
-    if turtle.bet_choice and turtle.winner then
+function Turtle:payout()
+    if self.bet_choice then
         player.money += turtle_square.current_bet * 4
-        sfx(0)
+        turtle_square:set_win()
     else
         sfx(2)
     end
     turtle_square.current_bet = 0
+    turtles = {}
+    self.init()
+    turtle_square = GameSquare:new(turtle_buttons, 1, 2, 64, turtles, gs_x, gs_y, 'turtles', 60)
 end
-
-
-turtle_sprites = {128, 130, 160, 162}
 
 gs_x = 0
 gs_y = 64

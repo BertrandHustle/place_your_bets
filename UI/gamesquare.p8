@@ -63,6 +63,12 @@ function GameSquare:render()
 end
 
 
+function GameSquare:set_win()
+    self.win = true
+    sfx(1, -1, 0, 20)
+end
+
+
 function GameSquare:cancel_win()
     self.win = false
 	self.win_frames = 0
