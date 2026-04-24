@@ -2,7 +2,8 @@
 Turtle = {
     back_leg = false,
     bet_choice = false,
-    finish_line = 0
+    finish_line = 0,
+    winner = false
 }
 
 turtles = {}
@@ -33,9 +34,11 @@ end
 
 
 function Turtle:step()
-    self.x += self.speed
+    --self.x += self.speed
+    self.x += self.speed * 10
     self:render()
-    if self.x + 12 >= self.finish_line then
+    if self.x + 12 >= self.finish_line and not turtle_square.win then
+        self.winner = true
         self:payout()
     end
 end
@@ -53,30 +56,35 @@ function Turtle:init()
         y_offset += 8
         turtle:render()
     end
-    pq(turtles)
 end
 
 
-function Turtle:place_bet()
+function Turtle:place_bet(turtle_num)
     if turtle_square.current_bet < 1 then
+        turtles[turtle_num].bet_choice = true
         turtle_square.current_bet += 10
         turtle_square.timer = turtle_square.time_limit
-        player_state.money -= 10
+        player.money -= 10
     end
 end
 
-
-function Turtle:payout()
-    if self.bet_choice then
-        player.money += turtle_square.current_bet * 4
-        turtle_square:set_win()
-    else
-        sfx(2)
-    end
+function Turtle:reset()
     turtle_square.current_bet = 0
     turtles = {}
-    self.init()
-    turtle_square = GameSquare:new(turtle_buttons, 1, 2, 64, turtles, gs_x, gs_y, 'turtles', 60)
+    self:init()
+end
+
+function Turtle:payout()
+    for _,turtle in pairs(turtles) do
+        if turtle.bet_choice and turtle.winner then
+            player.money += turtle_square.current_bet * 4
+            turtle_square:set_win()
+            self:reset()
+            return
+        end
+    end
+    sfx(2)
+    self:reset()
 end
 
 gs_x = 0

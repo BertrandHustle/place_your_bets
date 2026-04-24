@@ -1,4 +1,4 @@
-player_state = {
+player = {
 	money = 1000
 }
 
@@ -56,7 +56,7 @@ end
 
 function _draw()
 	cls()
-	print(player_state.money, 2, 2)
+	print(player.money, 2, 2)
 	for _,row in pairs(game_squares) do 
 		for _,gs in pairs(row) do
 			gs:render()

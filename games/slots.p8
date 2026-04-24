@@ -41,7 +41,7 @@ end
 function Slots:place_bet()
     slots_square.current_bet += 10
     slots_square.timer = slots_square.time_limit
-    player_state.money -= 10
+    player.money -= 10
 end
 
 
@@ -93,7 +93,7 @@ function Slots:roll_reels()
             reel:render()
         end
         winnings = Slots.payout() * Slots.facing_symbols[1][2]
-        player_state.money += winnings
+        player.money += winnings
         slots_square.current_bet = 0 
         Slots.facing_symbols = {}
     end

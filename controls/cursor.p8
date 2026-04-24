@@ -35,7 +35,7 @@ function select_button(selected_square)
 		end
 		selected_square.buttons[ix].highlighted = true
 	elseif btnp(4) then --select
-		selected_square.buttons[ix].action()
+		selected_square.buttons[ix]:action(ix)
 	end
 	selected_square.selected_button_ix = ix
 end
