@@ -36,8 +36,7 @@ end
 function Turtle:step()
     --self.x += self.speed
     self.x += self.speed * 10
-    self:render()
-    if self.x + 12 >= self.finish_line and not turtle_square.win then
+    if self.x + 12 >= self.finish_line and turtle_square.current_bet > 0 then
         self.winner = true
         self:payout()
     end
@@ -72,6 +71,8 @@ function Turtle:reset()
     turtle_square.current_bet = 0
     turtles = {}
     self:init()
+    turtle_square = GameSquare:new(turtle_buttons, 1, 2, 64, turtles, gs_x, gs_y, 'turtles', 60)
+    game_squares[1][2] = turtle_square
 end
 
 function Turtle:payout()

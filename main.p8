@@ -9,14 +9,12 @@ frames = 0
 
 function _init()
 	cls()
-	Slots.init()
-	Turtle.init()
-	gs1 = slots_square
-	gs2 = turtle_square
+	Slots:init()
+	Turtle:init()
 	gs3 = GameSquare:new({}, 2, 1, 64, {}, 64, 0, 'test3', 60)
 	gs4 = GameSquare:new({}, 2, 2, 64, {}, 64, 64, 'test4', 60)
-	highlighted_square = gs1
-	row1 = {gs1, gs2}
+	highlighted_square = slots_square
+	row1 = {slots_square, turtle_square}
 	row2 = {gs3, gs4}
 	add(game_squares, row1)
 	add(game_squares, row2)
@@ -52,6 +50,9 @@ function _update()
 	select_game(game_squares)
 
 	frames += 1
+
+	if sec do
+	end
 end
 
 function _draw()
@@ -63,9 +64,7 @@ function _draw()
 		end
 	end
 
-	if sec and gs2.current_bet > 0 then
-		-- pq(turtles)
-		-- pq(gs2.game_pieces)
+	if sec and turtle_square.current_bet > 0 then
 		for _,turtle in pairs(turtles) do
 			turtle:step()
 		end
