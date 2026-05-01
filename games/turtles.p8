@@ -55,6 +55,8 @@ function Turtle:init()
         y_offset += 8
         turtle:render()
     end
+    new_square = GameSquare:new(turtle_buttons, 1, 2, 64, turtles, gs_x, gs_y, 'turtles', 60, true)
+    return new_square
 end
 
 
@@ -67,25 +69,17 @@ function Turtle:place_bet(turtle_num)
     end
 end
 
-function Turtle:reset()
-    turtle_square.current_bet = 0
-    turtles = {}
-    self:init()
-    turtle_square = GameSquare:new(turtle_buttons, 1, 2, 64, turtles, gs_x, gs_y, 'turtles', 60)
-    game_squares[1][2] = turtle_square
-end
-
 function Turtle:payout()
     for _,turtle in pairs(turtles) do
         if turtle.bet_choice and turtle.winner then
             player.money += turtle_square.current_bet * 4
             turtle_square:set_win()
-            self:reset()
+            turtle_square:reinit()
             return
         end
     end
     sfx(2)
-    self:reset()
+    turtle_square:reinit()
 end
 
 gs_x = 0
@@ -98,4 +92,4 @@ for i=1,4 do
     x_offset += 8
 end
 
-turtle_square = GameSquare:new(turtle_buttons, 1, 2, 64, turtles, gs_x, gs_y, 'turtles', 60)
+turtle_square = GameSquare:new(turtle_buttons, 1, 2, 64, turtles, gs_x, gs_y, 'turtles', 60, true)

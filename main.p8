@@ -50,9 +50,6 @@ function _update()
 	select_game(game_squares)
 
 	frames += 1
-
-	if sec do
-	end
 end
 
 function _draw()
