@@ -4,14 +4,14 @@ GameSquare = {
     x_offset = 8,
     y_offset = 8,
     highlighted = false,
-    reinit = false,
+    reinit_on_win = false,
     selected = false,
     win = false,
     win_frames = 0
 }
 
 
-function GameSquare:new(buttons, coord_x, coord_y, edge_length, game_pieces, init_x, init_y, name, time_limit, reinit)
+function GameSquare:new(buttons, coord_x, coord_y, edge_length, game_pieces, init_x, init_y, name, time_limit)
 	local obj = {
         buttons=buttons, 
         coord_x=coord_x,
@@ -22,8 +22,7 @@ function GameSquare:new(buttons, coord_x, coord_y, edge_length, game_pieces, ini
         init_y=init_y, 
         name=name,
         timer=time_limit,
-        time_limit=time_limit,
-        reinit_on_win=reinit_on_win
+        time_limit=time_limit
     }
     for _, button in pairs(buttons) do
         button.parent = self
@@ -74,10 +73,10 @@ end
 function GameSquare:cancel_win()
     self.win = false
 	self.win_frames = 0
+    self.current_bet = 0
 end
 
 
-function GameSquare:reinit()
-    self.current_bet = 0
-    game_squares[self.coord_x][self.coord_y] = self:init()
+function GameSquare:refresh_square()
+    game_squares[self.coord_x][self.coord_y] = self
 end

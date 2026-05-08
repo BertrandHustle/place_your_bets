@@ -10,7 +10,7 @@ frames = 0
 function _init()
 	cls()
 	Slots:init()
-	Turtle:init()
+	turtle_square = Turtle:init()
 	gs3 = GameSquare:new({}, 2, 1, 64, {}, 64, 0, 'test3', 60)
 	gs4 = GameSquare:new({}, 2, 2, 64, {}, 64, 64, 'test4', 60)
 	highlighted_square = slots_square
@@ -31,6 +31,7 @@ function _update()
 		for _,gs in pairs(row) do
 			if gs.win_frames >= 20 then
 				gs:cancel_win()
+				gs:refresh_square()
 			end
 			if (gs.name != highlighted_square.name) then
 				gs.highlighted = false
