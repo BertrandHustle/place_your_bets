@@ -31,7 +31,6 @@ function _update()
 		for _,gs in pairs(row) do
 			if gs.win_frames >= 20 then
 				gs:cancel_win()
-				gs:refresh_square()
 			end
 			if (gs.name != highlighted_square.name) then
 				gs.highlighted = false

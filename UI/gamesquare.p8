@@ -75,8 +75,3 @@ function GameSquare:cancel_win()
 	self.win_frames = 0
     self.current_bet = 0
 end
-
-
-function GameSquare:refresh_square()
-    game_squares[self.coord_x][self.coord_y] = self
-end

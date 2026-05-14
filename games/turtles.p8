@@ -64,6 +64,13 @@ function Turtle:make_turtles()
 end
 
 
+function Turtle:reset_game()
+    turtles = Turtle:make_turtles()
+    turtle_square.game_pieces = turtles
+    turtle_square.current_bet = 0
+end
+
+
 function Turtle:make_buttons()
     turtle_buttons = {}
     x_offset = 16
@@ -98,12 +105,10 @@ function Turtle:payout()
         if turtle.bet_choice and turtle.winner then
             player.money += turtle_square.current_bet * 4
             turtle_square:set_win()
-            turtle_square = Turtle:init()
-            turtle_square:refresh_square()
+            Turtle:reset_game()
             return
         end
     end
     sfx(2)
-    turtle_square = Turtle:init()
-    turtle_square:refresh_square()
+    Turtle:reset_game()
 end
