@@ -66,4 +66,10 @@ function _draw()
 			turtle:step()
 		end
 	end
+
+	pq(Slots.spinning)
+
+	if Slots.spinning and (frames % 5 == 0) then
+		Slots:spin_reel()
+	end
 end

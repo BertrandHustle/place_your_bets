@@ -18,7 +18,8 @@ Slots = {
     num_reels = 3,
     reels = {},
     rows = 1,
-    spin_time = 5
+    spinning = false,
+    spin_time = 3
 }
 
 Reel = {
@@ -54,7 +55,11 @@ function Slots:payout()
         prev_symbol = symbol
     end
     slots_square:set_win()
-    return slots_square.current_bet
+    winnings = Slots.payout() * Slots.facing_symbols[1][2]
+    player.money += winnings
+    slots_square.current_bet = 0 
+    Slots.facing_symbols = {}
+    Slots.spinning = false
 end
 
 
@@ -74,6 +79,17 @@ function Slots:build_reel(x, y)
 end
 
 
+function Slots:spin_reel()
+    pq('test')
+    for _, reel in pairs(Slots.reels) do
+        reel.facing_symbol = rnd(reel.symbols)
+        --reel.facing_symbol = Slots.symbols.rare[1]
+        add(Slots.facing_symbols, reel.facing_symbol)
+        reel:render()
+    end
+end
+
+
 function Slots:init()
     x = 10
     y = 10
@@ -84,18 +100,9 @@ function Slots:init()
 end
 
 
-function Slots:roll_reels()
+function Slots:start_reels()
     if (slots_square.current_bet > 0) then
-        for _, reel in pairs(Slots.reels) do
-            reel.facing_symbol = rnd(reel.symbols)
-            --reel.facing_symbol = Slots.symbols.rare[1]
-            add(Slots.facing_symbols, reel.facing_symbol)
-            reel:render()
-        end
-        winnings = Slots.payout() * Slots.facing_symbols[1][2]
-        player.money += winnings
-        slots_square.current_bet = 0 
-        Slots.facing_symbols = {}
+        Slots.spinning = true
     end
 end
 
@@ -103,6 +110,6 @@ gs_x = 0
 gs_y = 0
 
 bet_button = Button:new(Slots.place_bet, 64, gs_x+10, gs_y+40, 2, 2)
-spin_button = Button:new(Slots.roll_reels, 66, gs_x+35, gs_y+40, 2, 2)
+spin_button = Button:new(Slots.start_reels, 66, gs_x+35, gs_y+40, 2, 2)
 
 slots_square = GameSquare:new({bet_button, spin_button}, 1, 1, 64, Slots.reels, gs_x, gs_y, 'slots', 60)
