@@ -67,9 +67,8 @@ function _draw()
 		end
 	end
 
-	pq(Slots.spinning)
-
-	if Slots.spinning and (frames % 5 == 0) then
+	if Slots.remaining_spins > 0 and (frames % 5 == 0) then
 		Slots:spin_reel()
+		pq(Slots.remaining_spins)
 	end
 end

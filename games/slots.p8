@@ -18,8 +18,8 @@ Slots = {
     num_reels = 3,
     reels = {},
     rows = 1,
-    spinning = false,
-    spin_time = 3
+    remaining_spins = 0,
+    spins = 3
 }
 
 Reel = {
@@ -80,13 +80,13 @@ end
 
 
 function Slots:spin_reel()
-    pq('test')
     for _, reel in pairs(Slots.reels) do
         reel.facing_symbol = rnd(reel.symbols)
         --reel.facing_symbol = Slots.symbols.rare[1]
         add(Slots.facing_symbols, reel.facing_symbol)
         reel:render()
     end
+    Slots.remaining_spins -= 1
 end
 
 
@@ -102,7 +102,7 @@ end
 
 function Slots:start_reels()
     if (slots_square.current_bet > 0) then
-        Slots.spinning = true
+        Slots.remaining_spins = Slots.spins
     end
 end
 
