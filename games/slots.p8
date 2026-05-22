@@ -2,40 +2,47 @@ Slots = {
     facing_symbols = {},
     symbols = {
         common = {
-            -- spr, val
-            {23, 5},  --plum
-            {24, 4},  --lemon
-            {26, 3},  --orange
-            {28, 1}   --cherry
+            -- spr, val, y
+            {23, 5, 0},  --plum
+            {24, 4, 0},  --lemon
+            {26, 3, 0},  --orange
+            {28, 1, 0}   --cherry
         },
         uncommon = {
-            {27, 50}  --diamond
+            {27, 50, 0}  --diamond
         },
         rare = {
-            {25, 100}  --seven
+            {25, 100, 0}  --seven
         }
     },
     num_reels = 3,
     reels = {},
     rows = 1,
     remaining_spins = 0,
-    spins = 3
+    spin_seconds = 10
 }
 
 Reel = {
     facing_symbol = nil,
+    symbol_ix = 1,
     symbols = {},
     x = 0,
     y = 0
 }
+
 
 function Reel:new(symbols, x, y)
 	local obj = {symbols=symbols, facing_symbol=rnd(symbols), x=x, y=y}
 	return setmetatable(obj, {__index = self})
 end
 
+
 function Reel:render()
-    spr(self.facing_symbol[1], self.x, self.y)
+    spr(96, self.x-2, self.y)  -- left wall
+    for _,sym in pairs(self.symbols) do
+        spr(sym[1], self.x, sym[3]) 
+    end
+    spr(97, self.x+2, self.y)  -- right wall
 end
 
 
@@ -65,24 +72,38 @@ end
 
 function Slots:build_reel(x, y)
     symbols = {}
-    for i=1, 15 do 
+    y_inc = 0
+    for i=1, 8 do 
         symbol = rnd(Slots.symbols.common)
+        symbol[3] = y + y_inc
         add(symbols, symbol)
+        y_inc += 2
     end
-    for i=1, 5 do 
+    for i=1, 3 do 
         symbol = rnd(Slots.symbols.uncommon)
+        symbol[3] = y + y_inc
         add(symbols, symbol)
+        y_inc += 2
     end
     symbol = rnd(Slots.symbols.rare)
+    symbol[3] = y + y_inc
     add(symbols, symbol)
+    pq(symbols)
     return Reel:new(symbols, x, y)
 end
 
 
 function Slots:spin_reel()
     for _, reel in pairs(Slots.reels) do
+        for _, sym in pairs(reel.symbols) do
+            if sym[3] == reel.y + 7 then
+                sym[3] = 0
+            else
+                sym[3] += 1
+            end
+        end
+        reel.symbol_ix += 2
         reel.facing_symbol = rnd(reel.symbols)
-        --reel.facing_symbol = Slots.symbols.rare[1]
         add(Slots.facing_symbols, reel.facing_symbol)
         reel:render()
     end
@@ -102,7 +123,7 @@ end
 
 function Slots:start_reels()
     if (slots_square.current_bet > 0) then
-        Slots.remaining_spins = Slots.spins
+        Slots.remaining_spins = Slots.spin_seconds
     end
 end
 
