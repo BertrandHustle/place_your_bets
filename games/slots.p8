@@ -40,7 +40,12 @@ end
 function Reel:render()
     spr(96, self.x-2, self.y)  -- left wall
     for _,sym in pairs(self.symbols) do
-        spr(sym[1], self.x, sym[3]) 
+        sym_y = sym[3]
+        spr_h = 1
+        if sym_y > self.y + 16 then
+            spr_h -= (sym_y - self.y + 16)
+        end
+        spr(sym[1], self.x, sym[3], 1, spr_h) 
     end
     spr(97, self.x+2, self.y)  -- right wall
 end
