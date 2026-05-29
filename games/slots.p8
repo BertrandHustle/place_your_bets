@@ -39,13 +39,21 @@ end
 
 function Reel:render()
     spr(96, self.x-2, self.y)  -- left wall
+    bottom = self.y + 16
     for _,sym in pairs(self.symbols) do
-        sym_y = sym[3]
-        spr_h = 1
-        if sym_y > self.y + 16 then
-            spr_h -= (sym_y - self.y + 16)
+        if (self.y < sym[3]) and (sym[3] < bottom) then  -- is visible
+            spr_h = 1
+            -- symbol is partially below bottom of reel
+            if (8 > bottom - sym[3]) and (bottom - sym[3] > 1) then
+                spr_h -= bottom - sym[3]/100
+            end
+            spr(sym[1], self.x, sym[3], 1, spr_h)  
         end
-        spr(sym[1], self.x, sym[3], 1, spr_h) 
+        if sym[3] > 8*#self.symbols then
+            sym[3] = self.y 
+        else
+            sym[3] += 1
+        end
     end
     spr(97, self.x+2, self.y)  -- right wall
 end
