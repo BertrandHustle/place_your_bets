@@ -41,7 +41,7 @@ function Reel:render()
     rect(self.x-4, self.y, self.x-4, self.y+23, 6)
     rect(self.x+4, self.y, self.x+4, self.y+23, 6)
     top = self.y
-    bottom = self.y + 16
+    bottom = self.y + 23
     for _,sym in pairs(self.symbols) do
         if (top <= sym[3]) and (sym[3] <= bottom) then  -- is visible
             spr_h = 1
@@ -80,22 +80,32 @@ function Slots:payout()
 end
 
 
+function Slots:copy_symbol(sym)
+    new_sym = {}
+    for val in all(sym) do
+        pq(val)
+        add(new_sym, val)
+    end
+    return new_sym
+end
+
+
 function Slots:build_reel(x, y)
     symbols = {}
     y_inc = 0
-    -- for i=1, 4 do 
-    --     symbol = rnd(Slots.symbols.common)
-    --     symbol[3] = y + y_inc
-    --     add(symbols, symbol)
-    --     y_inc += 2
-    -- end
-    -- for i=1, 2 do 
-    --     symbol = rnd(Slots.symbols.uncommon)
-    --     symbol[3] = y + y_inc
-    --     add(symbols, symbol)
-    --     y_inc += 2
-    -- end
-    symbol = rnd(Slots.symbols.rare)
+    for i=1, 4 do 
+        symbol = Slots:copy_symbol(rnd(Slots.symbols.common))
+        symbol[3] = y + y_inc
+        add(symbols, symbol)
+        y_inc += 7
+    end
+    for i=1, 2 do 
+        symbol = Slots:copy_symbol(rnd(Slots.symbols.uncommon))
+        symbol[3] = y + y_inc
+        add(symbols, symbol)
+        y_inc += 7
+    end
+    symbol = Slots:copy_symbol(rnd(Slots.symbols.rare))
     symbol[3] = y + y_inc
     add(symbols, symbol)
     return Reel:new(symbols, x, y)
@@ -106,7 +116,7 @@ function Slots:spin_reel()
     for _, reel in pairs(Slots.reels) do
         bottom = reel.y + 23
         for _, sym in pairs(reel.symbols) do
-            if sym[3] > bottom then
+            if sym[3] > bottom + 8*#symbols then
                 sym[3] = reel.y 
             else
                 sym[3] += 2
