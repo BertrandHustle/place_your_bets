@@ -37,21 +37,22 @@ end
 
 
 function Reel:render()
-    spr(96, self.x-2, self.y)  -- left wall
+    -- draw walls
+    rect(self.x-4, self.y, self.x-4, self.y+23, 6)
+    rect(self.x+4, self.y, self.x+4, self.y+23, 6)
     top = self.y
     bottom = self.y + 16
     for _,sym in pairs(self.symbols) do
-        if (top < sym[3]) and (sym[3] < bottom) then  -- is visible
+        if (top <= sym[3]) and (sym[3] <= bottom) then  -- is visible
             spr_h = 1
             -- symbol is partially below bottom of reel
             diff = bottom - sym[3]
             if (8 > diff) and (diff > 1) then
                 spr_h -= diff/100
             end
-            spr(sym[1], self.x, sym[3], 1, spr_h)  
+            spr(sym[1], self.x-4, sym[3], 1, spr_h)  
         end
     end
-    spr(97, self.x+2, self.y)  -- right wall
 end
 
 
@@ -82,18 +83,18 @@ end
 function Slots:build_reel(x, y)
     symbols = {}
     y_inc = 0
-    for i=1, 4 do 
-        symbol = rnd(Slots.symbols.common)
-        symbol[3] = y + y_inc
-        add(symbols, symbol)
-        y_inc += 2
-    end
-    for i=1, 2 do 
-        symbol = rnd(Slots.symbols.uncommon)
-        symbol[3] = y + y_inc
-        add(symbols, symbol)
-        y_inc += 2
-    end
+    -- for i=1, 4 do 
+    --     symbol = rnd(Slots.symbols.common)
+    --     symbol[3] = y + y_inc
+    --     add(symbols, symbol)
+    --     y_inc += 2
+    -- end
+    -- for i=1, 2 do 
+    --     symbol = rnd(Slots.symbols.uncommon)
+    --     symbol[3] = y + y_inc
+    --     add(symbols, symbol)
+    --     y_inc += 2
+    -- end
     symbol = rnd(Slots.symbols.rare)
     symbol[3] = y + y_inc
     add(symbols, symbol)
@@ -103,9 +104,9 @@ end
 
 function Slots:spin_reel()
     for _, reel in pairs(Slots.reels) do
-        bottom = reel.y + 16
+        bottom = reel.y + 23
         for _, sym in pairs(reel.symbols) do
-            if sym[3] > 8*#reel.symbols then
+            if sym[3] > bottom then
                 sym[3] = reel.y 
             else
                 sym[3] += 2
