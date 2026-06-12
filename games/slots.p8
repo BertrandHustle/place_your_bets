@@ -45,16 +45,15 @@ function Reel:render()
     for _,sym in pairs(self.symbols) do
         if (top <= sym[3]) and (sym[3] <= bottom) then  -- is visible
             spr_h = 1
-            -- symbol is partially below bottom of reel
-            -- top = 10
-            -- top of visible sprite = 26
-            -- bottom = 33
-            -- bottom end of sprite = 40
-            if (bottom-7 <= sym[3]) and (sym[3] <= bottom) then
+            -- check if symbol is past top but still visible
+            -- TODO: USE CLIP() FOR THIS
+            if (top-7 <= sym[3]) and (sym[3] <= top) then
+                hidden = top-7-sym[3]
+                spr_h -= hidden/8
+            -- check if symbol is past bottom but still visible
+            elseif (bottom-7 <= sym[3]) and (sym[3] <= bottom) then
                 hidden = bottom-7-sym[3]
                 spr_h -= abs(hidden)/8
-                pq(sym[3])
-                pq(bottom-7)
             end
             spr(sym[1], self.x-4, sym[3], 1, spr_h)  
         end
@@ -121,7 +120,7 @@ function Slots:spin_reel()
     for _, reel in pairs(Slots.reels) do
         bottom = reel.y + 23
         for _, sym in pairs(reel.symbols) do
-            if sym[3] > bottom + 8*#symbols then
+            if sym[3] > bottom + 7 + 18 + 2 then
                 sym[3] = reel.y 
             else
                 sym[3] += 2
