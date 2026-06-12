@@ -46,9 +46,15 @@ function Reel:render()
         if (top <= sym[3]) and (sym[3] <= bottom) then  -- is visible
             spr_h = 1
             -- symbol is partially below bottom of reel
-            diff = bottom - sym[3]
-            if (8 > diff) and (diff > 1) then
-                spr_h -= diff/100
+            -- top = 10
+            -- top of visible sprite = 26
+            -- bottom = 33
+            -- bottom end of sprite = 40
+            if (bottom-7 <= sym[3]) and (sym[3] <= bottom) then
+                hidden = bottom-7-sym[3]
+                spr_h -= abs(hidden)/8
+                pq(sym[3])
+                pq(bottom-7)
             end
             spr(sym[1], self.x-4, sym[3], 1, spr_h)  
         end
@@ -83,7 +89,6 @@ end
 function Slots:copy_symbol(sym)
     new_sym = {}
     for val in all(sym) do
-        pq(val)
         add(new_sym, val)
     end
     return new_sym
