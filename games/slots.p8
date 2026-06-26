@@ -42,21 +42,37 @@ function Reel:render()
     rect(self.x+4, self.y, self.x+4, self.y+23, 6)
     top = self.y
     bottom = self.y + 23
+    --clip(self.x, top-8, 8, bottom+8)
     for _,sym in pairs(self.symbols) do
-        if (top <= sym[3]) and (sym[3] <= bottom) then  -- is visible
-            spr_h = 1
-            -- check if symbol is past top but still visible
-            -- TODO: USE CLIP() FOR THIS
-            if (top-7 <= sym[3]) and (sym[3] <= top) then
-                hidden = top-7-sym[3]
-                spr_h -= hidden/8
-            -- check if symbol is past bottom but still visible
-            elseif (bottom-7 <= sym[3]) and (sym[3] <= bottom) then
-                hidden = bottom-7-sym[3]
-                spr_h -= abs(hidden)/8
-            end
-            spr(sym[1], self.x-4, sym[3], 1, spr_h)  
-        end
+        -- top of reel = 8
+        -- bottom of reel = 32 
+
+        -- past top:
+        -- top of symbol = 4
+        -- bottom of symbol = 12
+        -- visible portion = 8-12
+
+        -- past bottom:
+        -- top of symbol = 30
+        -- bottom of symbol = 38
+        -- visible portion = 30-32
+        spr(sym[1], self.x-4, sym[3])
+
+        -- if (top <= sym[3]) and (sym[3] <= bottom) then  -- is visible
+        --     spr_h = 1
+        --     -- check if symbol is past top but still visible
+        --     -- TODO: USE CLIP() FOR THIS
+        --     if (top-7 <= sym[3]) and (sym[3] <= top) then
+        --         hidden = top-7-sym[3]
+        --         spr_h -= hidden/8
+        --     -- check if symbol is past bottom but still visible
+        --     elseif (bottom-7 <= sym[3]) and (sym[3] <= bottom) then
+        --         hidden = bottom-7-sym[3]
+        --         spr_h -= abs(hidden)/8
+        --     end
+            -- spr(sym[1], self.x-4, sym[3])  
+            -- clip(sym[1], spr_h, 8, )
+        --end
     end
 end
 

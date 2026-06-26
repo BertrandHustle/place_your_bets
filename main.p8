@@ -54,7 +54,7 @@ end
 
 function _draw()
 	cls()
-	print(player.money, 2, 2)
+	print(player.money, 127-#tostr(player.money)*4, 121)
 	for _,row in pairs(game_squares) do 
 		for _,gs in pairs(row) do
 			gs:render()
