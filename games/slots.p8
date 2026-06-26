@@ -38,41 +38,45 @@ end
 
 function Reel:render()
     -- draw walls
-    rect(self.x-4, self.y, self.x-4, self.y+23, 6)
-    rect(self.x+4, self.y, self.x+4, self.y+23, 6)
     top = self.y
-    bottom = self.y + 23
-    --clip(self.x, top-8, 8, bottom+8)
+    bottom = self.y+23
+    rect(self.x-4, top, self.x-4, bottom, 6)
+    rect(self.x+4, top, self.x+4, bottom, 6)
     for _,sym in pairs(self.symbols) do
         -- top of reel = 8
         -- bottom of reel = 32 
 
         -- past top:
-        -- top of symbol = 4
         -- bottom of symbol = 12
         -- visible portion = 8-12
 
         -- past bottom:
-        -- top of symbol = 30
-        -- bottom of symbol = 38
-        -- visible portion = 30-32
-        spr(sym[1], self.x-4, sym[3])
+        -- top of symbol = 22
+        -- visible portion = 22-32
 
-        -- if (top <= sym[3]) and (sym[3] <= bottom) then  -- is visible
-        --     spr_h = 1
-        --     -- check if symbol is past top but still visible
-        --     -- TODO: USE CLIP() FOR THIS
-        --     if (top-7 <= sym[3]) and (sym[3] <= top) then
-        --         hidden = top-7-sym[3]
-        --         spr_h -= hidden/8
-        --     -- check if symbol is past bottom but still visible
-        --     elseif (bottom-7 <= sym[3]) and (sym[3] <= bottom) then
-        --         hidden = bottom-7-sym[3]
-        --         spr_h -= abs(hidden)/8
-        --     end
-            -- spr(sym[1], self.x-4, sym[3])  
-            -- clip(sym[1], spr_h, 8, )
-        --end
+        sx, sy = get_spr_coords(sym[1])
+
+        top_of_symbol = sym[3]
+        bottom_of_symbol = sym[3]+7
+
+        top_clip = bottom_of_symbol-top
+        bottom_clip = bottom-top_of_symbol
+        -- pq(top_clip)
+        -- pq(bottom_clip)
+        if (top_clip < 8) then
+            sy += top_clip
+            sh = top_clip 
+        elseif (bottom_clip < 8) then
+            sy += bottom_clip
+            sh = bottom_clip
+        else
+            sh = 8
+        end
+
+        pq(top_clip)
+        
+        sspr(sx, sy, 8, sh, self.x-4, sym[3])
+
     end
 end
 

@@ -40,6 +40,12 @@ function highlight(sprite_val, x, y, w, h)
 end
 
 
+function get_spr_coords(sp)
+    sx, sy = (sp % 16) * 8, (sp \ 16) * 8
+    return sx, sy
+end
+
+
 -- function gamesquare_lookup_by_name(name, gq_rows)
 --     for _, row in pairs(gq_rows) do 
 --         for _, gq in pairs(row) do
