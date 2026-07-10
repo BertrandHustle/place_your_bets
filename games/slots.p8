@@ -59,23 +59,33 @@ function Reel:render()
         top_of_symbol = sym[3]
         bottom_of_symbol = sym[3]+8
 
-        top_clip = (bottom_of_symbol-top)+1
+        top_clip = (bottom_of_symbol-top)
         bottom_clip = (bottom-top_of_symbol)+1
 
-        if (top_clip < 8) then
-            sy += top_clip
-            sh = top_clip 
-        elseif (bottom_clip < 8) then
-            sh = bottom_clip
-        else
-            sh = 8
-        end
-
-        pq(top)
+        pq(top_of_symbol)
         pq(bottom_of_symbol)
-        
-        sspr(sx, sy, 8, sh, self.x-4, sym[3])
+        pq(top)
+        pq(bottom)
 
+        dy = sym[3]
+
+        if (top_of_symbol < bottom and bottom_of_symbol > top) then
+            if (top_clip < 8) then
+                sy += 8-top_clip
+                sh = top_clip
+                dy += 8-top_clip
+            elseif (bottom_clip < 8) then
+                sh = bottom_clip
+            else
+                sh = 8
+            end
+
+            --sy += 2
+            --sh = 4
+            pq(sh)
+            
+            sspr(sx, sy, 8, sh, self.x-4, dy)
+        end
     end
 end
 
@@ -129,7 +139,8 @@ function Slots:build_reel(x, y)
     --     y_inc += 7
     -- end
     symbol = Slots:copy_symbol(rnd(Slots.symbols.rare))
-    symbol[3] = y + y_inc
+    --symbol[3] = y + y_inc
+    symbol[3] = y - 8
     add(symbols, symbol)
     return Reel:new(symbols, x, y)
 end
