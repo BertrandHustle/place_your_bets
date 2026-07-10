@@ -47,33 +47,32 @@ function Reel:render()
         -- bottom of reel = 32 
 
         -- past top:
-        -- bottom of symbol = 12
-        -- visible portion = 8-12
+        -- top of symbol = 6
+        -- visible portion = 8-14
 
         -- past bottom:
-        -- top of symbol = 22
-        -- visible portion = 22-32
+        -- symbol = 28(top)-36(bottom)
+        -- visible portion = 28(top)-32(bottom of reel)
 
         sx, sy = get_spr_coords(sym[1])
 
         top_of_symbol = sym[3]
-        bottom_of_symbol = sym[3]+7
+        bottom_of_symbol = sym[3]+8
 
-        top_clip = bottom_of_symbol-top
-        bottom_clip = bottom-top_of_symbol
-        -- pq(top_clip)
-        -- pq(bottom_clip)
+        top_clip = (bottom_of_symbol-top)+1
+        bottom_clip = (bottom-top_of_symbol)+1
+
         if (top_clip < 8) then
             sy += top_clip
             sh = top_clip 
         elseif (bottom_clip < 8) then
-            sy += bottom_clip
             sh = bottom_clip
         else
             sh = 8
         end
 
-        pq(top_clip)
+        pq(top)
+        pq(bottom_of_symbol)
         
         sspr(sx, sy, 8, sh, self.x-4, sym[3])
 
@@ -117,18 +116,18 @@ end
 function Slots:build_reel(x, y)
     symbols = {}
     y_inc = 0
-    for i=1, 4 do 
-        symbol = Slots:copy_symbol(rnd(Slots.symbols.common))
-        symbol[3] = y + y_inc
-        add(symbols, symbol)
-        y_inc += 7
-    end
-    for i=1, 2 do 
-        symbol = Slots:copy_symbol(rnd(Slots.symbols.uncommon))
-        symbol[3] = y + y_inc
-        add(symbols, symbol)
-        y_inc += 7
-    end
+    -- for i=1, 4 do 
+    --     symbol = Slots:copy_symbol(rnd(Slots.symbols.common))
+    --     symbol[3] = y + y_inc
+    --     add(symbols, symbol)
+    --     y_inc += 7
+    -- end
+    -- for i=1, 2 do 
+    --     symbol = Slots:copy_symbol(rnd(Slots.symbols.uncommon))
+    --     symbol[3] = y + y_inc
+    --     add(symbols, symbol)
+    --     y_inc += 7
+    -- end
     symbol = Slots:copy_symbol(rnd(Slots.symbols.rare))
     symbol[3] = y + y_inc
     add(symbols, symbol)
@@ -141,7 +140,7 @@ function Slots:spin_reel()
         bottom = reel.y + 23
         for _, sym in pairs(reel.symbols) do
             if sym[3] > bottom + 7 + 18 + 2 then
-                sym[3] = reel.y 
+                sym[3] = reel.y-8
             else
                 sym[3] += 2
             end
