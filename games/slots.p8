@@ -19,6 +19,7 @@ Slots = {
     reels = {},
     rows = 1,
     remaining_spins = 0,
+    scoring_lines = 3,
     spin_seconds = 10
 }
 
@@ -39,20 +40,17 @@ end
 function Reel:render()
     -- draw walls
     top = self.y
-    bottom = self.y+23
+    bottom = self.y+24
     rect(self.x-4, top, self.x-4, bottom, 6)
     rect(self.x+4, top, self.x+4, bottom, 6)
+    -- draw lines
+    sc_line_dist = (bottom-top)/(Slots.scoring_lines+1)
+    line_y = top + sc_line_dist
+    for i=1, Slots.scoring_lines, 1 do
+        line(self.x-4, line_y, self.x+4, line_y)
+        line_y += sc_line_dist
+    end
     for _,sym in pairs(self.symbols) do
-        -- top of reel = 8
-        -- bottom of reel = 32 
-
-        -- past top:
-        -- top of symbol = 6
-        -- visible portion = 8-14
-
-        -- past bottom:
-        -- symbol = 28(top)-36(bottom)
-        -- visible portion = 28(top)-32(bottom of reel)
 
         sx, sy = get_spr_coords(sym[1])
 
