@@ -2,17 +2,17 @@ Slots = {
     facing_symbols = {},
     symbols = {
         common = {
-            -- spr, val, y
-            {23, 5, 0},  --plum
-            {24, 4, 0},  --lemon
-            {26, 3, 0},  --orange
-            {28, 1, 0}   --cherry
+            -- spr, val
+            {23, 5},  --plum
+            {24, 4},  --lemon
+            {26, 3},  --orange
+            {28, 1}   --cherry
         },
         uncommon = {
-            {27, 50, 0}  --diamond
+            {27, 50}  --diamond
         },
         rare = {
-            {25, 100, 0}  --seven
+            {25, 100}  --seven
         }
     },
     num_reels = 3,
@@ -23,16 +23,12 @@ Slots = {
     spin_seconds = 10
 }
 
-Reel = {
-    facing_symbol = nil,
-    symbols = {},
-    x = 0,
-    y = 0
-}
+-- TODO: simplify these inits like this in other classes
+Reel={}
 
 
-function Reel:new(symbols, x, y)
-	local obj = {symbols=symbols, facing_symbol=rnd(symbols), x=x, y=y}
+function Reel:new(symbols, scoring_lines, x, y, height)
+	local obj = {symbols=symbols, scoring_lines=scoring_lines, x=x, y=y, height=height}
 	return setmetatable(obj, {__index = self})
 end
 
@@ -44,11 +40,8 @@ function Reel:render()
     rect(self.x-4, top, self.x-4, bottom, 6)
     rect(self.x+4, top, self.x+4, bottom, 6)
     -- draw lines
-    sc_line_dist = (bottom-top)/(Slots.scoring_lines+1)
-    line_y = top + sc_line_dist
-    for i=1, Slots.scoring_lines, 1 do
-        line(self.x-4, line_y, self.x+4, line_y)
-        line_y += sc_line_dist
+    for _,sc_line in pairs(self.scoring_lines) do
+        line(self.x-4, sc_line, self.x+4, sc_line)
     end
     for _,sym in pairs(self.symbols) do
 
@@ -112,7 +105,16 @@ function Slots:copy_symbol(sym)
 end
 
 
-function Slots:build_reel(x, y)
+function Slots:build_reel(x, y, height)
+    -- add scoring lines
+    scoring_lines = {}
+    sc_line_dist = (height)/(Slots.scoring_lines+1)
+    line_y = y + sc_line_dist
+    for i=1, Slots.scoring_lines, 1 do
+        add(scoring_lines, line_y)
+        line_y += sc_line_dist
+    end
+    -- add symbols
     symbols = {}
     y_inc = 0
     for i=1, 4 do 
@@ -130,7 +132,7 @@ function Slots:build_reel(x, y)
     symbol = Slots:copy_symbol(rnd(Slots.symbols.rare))
     symbol[3] = y + y_inc
     add(symbols, symbol)
-    return Reel:new(symbols, x, y)
+    return Reel:new(symbols, scoring_lines, x, y, height)
 end
 
 
@@ -149,11 +151,17 @@ function Slots:spin_reel()
 end
 
 
+-- function Slots:move_towards_scoring_line(reel)
+--     if 
+-- end
+
+
 function Slots:init()
     x = 10
     y = 10
+    height = 24
     for i=1, Slots.num_reels do
-        add(Slots.reels, Slots:build_reel(x, y))
+        add(Slots.reels, Slots:build_reel(x, y, height))
         x += 10
     end
 end
