@@ -2,7 +2,7 @@ Slots = {
     facing_symbols = {},
     symbols = {
         common = {
-            -- spr, val
+            -- spr, val, y
             {23, 5},  --plum
             {24, 4},  --lemon
             {26, 3},  --orange
@@ -15,12 +15,15 @@ Slots = {
             {25, 100}  --seven
         }
     },
+    closest_scline = nil,
+    closest_sym = nil,
     num_reels = 3,
     reels = {},
     rows = 1,
     remaining_spins = 0,
     scoring_lines = 3,
-    spin_seconds = 10
+    spin_seconds = 10,
+    spinning = false
 }
 
 -- TODO: simplify these inits like this in other classes
@@ -137,13 +140,29 @@ end
 
 
 function Slots:spin_reel()
+
     for _, reel in pairs(Slots.reels) do
         bottom = reel.y + 23
         for _, sym in pairs(reel.symbols) do
-            if sym[3] > bottom + 7 + 18 + 2 then
-                sym[3] = reel.y-8
-            else
-                sym[3] += 2
+            if Slots.remaining_spins > 0 then
+                if sym[3] > bottom + 27 then
+                    sym[3] = reel.y-8
+                else
+                    sym[3] += 2
+                end
+            elseif Slots.spinning == true then
+                for _, scline in pairs(reel.scoring_lines) do
+                    diff = abs(sym[3]-scline)
+                    if self.closest_scline == nil or diff < abs(self.closest_sym-self.closest_scline) then
+                        self.closest_scline = scline
+                        self.closest_sym = sym[3]
+                    end
+                end
+                if Slots.spinning == false then
+                    break
+                else
+                    Slots:adjust_reels()
+                end
             end
         end
     end
@@ -151,9 +170,22 @@ function Slots:spin_reel()
 end
 
 
--- function Slots:move_towards_scoring_line(reel)
---     if 
--- end
+function Slots:adjust_reels()
+    pq(self.closest_scline)
+    pq(self.closest_sym)
+    for _, reel in pairs(Slots.reels) do
+        for _, sym in pairs(reel.symbols) do
+            if self.closest_sym > self.closest_scline do
+                sym[3] -= 1
+            elseif self.closest_sym < self.closest_scline then
+                sym[3] += 1
+            else
+                Slots.spinning = false
+                return
+            end
+        end
+    end
+end
 
 
 function Slots:init()
@@ -170,6 +202,7 @@ end
 function Slots:start_reels()
     if (slots_square.current_bet > 0) then
         Slots.remaining_spins = Slots.spin_seconds
+        Slots.spinning = true
     end
 end
 
