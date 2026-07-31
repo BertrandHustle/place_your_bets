@@ -67,7 +67,11 @@ function _draw()
 		end
 	end
 
-	if Slots.spinning == true and (frames % 10 == 0) then
-		Slots:spin_reel()
+	if (frames % 10 == 0) then
+		if Slots.remaining_spins > 0 then
+			Slots:spin_reel()
+		elseif Slots.adjusting == true then
+			Slots:adjust_reels()
+		end
 	end
 end

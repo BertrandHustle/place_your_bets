@@ -23,7 +23,7 @@ Slots = {
     remaining_spins = 0,
     scoring_lines = 3,
     spin_seconds = 10,
-    spinning = false
+    adjusting = false
 }
 
 -- TODO: simplify these inits like this in other classes
@@ -140,17 +140,17 @@ end
 
 
 function Slots:spin_reel()
-
     for _, reel in pairs(Slots.reels) do
         bottom = reel.y + 23
         for _, sym in pairs(reel.symbols) do
-            if Slots.remaining_spins > 0 then
-                if sym[3] > bottom + 27 then
-                    sym[3] = reel.y-8
-                else
-                    sym[3] += 2
-                end
-            elseif Slots.spinning == true then
+            // TODO: fix this so symbols are evenly spaced
+            if sym[3] > #reel.symbols * 7 then
+                sym[3] = reel.y-8
+            else
+                sym[3] += 2
+            end
+            pq(reel.symbols)
+            if Slots.remaining_spins == 1 then
                 for _, scline in pairs(reel.scoring_lines) do
                     diff = abs(sym[3]-scline)
                     if self.closest_scline == nil or diff < abs(self.closest_sym-self.closest_scline) then
@@ -158,11 +158,7 @@ function Slots:spin_reel()
                         self.closest_sym = sym[3]
                     end
                 end
-                if Slots.spinning == false then
-                    break
-                else
-                    Slots:adjust_reels()
-                end
+                Slots.adjusting = true
             end
         end
     end
@@ -171,20 +167,23 @@ end
 
 
 function Slots:adjust_reels()
-    pq(self.closest_scline)
-    pq(self.closest_sym)
-    for _, reel in pairs(Slots.reels) do
-        for _, sym in pairs(reel.symbols) do
-            if self.closest_sym > self.closest_scline do
-                sym[3] -= 1
-            elseif self.closest_sym < self.closest_scline then
-                sym[3] += 1
-            else
-                Slots.spinning = false
-                return
+    if self.closest_sym == self.closest_scline then
+        self.adjusting = false
+    else
+        for _, reel in pairs(Slots.reels) do
+            for _, sym in pairs(reel.symbols) do
+                if self.closest_sym > self.closest_scline then
+                    self.closest_sym -= 1
+                    sym[3] -= 1
+                elseif self.closest_sym < self.closest_scline then
+                    self.closest_sym += 1
+                    sym[3] += 1
+                end
             end
         end
     end
+    self.closest_sym = nil 
+    self.closest_scline = nil
 end
 
 
