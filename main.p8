@@ -8,6 +8,7 @@ selected_square = nil
 frames = 0
 
 function _init()
+	pq('init')
 	cls()
 	Slots:init()
 	turtle_square = Turtle:init()
@@ -67,11 +68,9 @@ function _draw()
 		end
 	end
 
-	if (frames % 10 == 0) then
-		if Slots.remaining_spins > 0 then
-			Slots:spin_reel()
-		elseif Slots.adjusting == true then
-			Slots:adjust_reels()
-		end
+	if Slots.remaining_spins > 0 then
+		Slots:spin_reel()
+	elseif Slots.adjusting == true then
+		Slots:adjust_reels()
 	end
 end

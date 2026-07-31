@@ -22,7 +22,7 @@ Slots = {
     rows = 1,
     remaining_spins = 0,
     scoring_lines = 3,
-    spin_seconds = 10,
+    spin_seconds = 60,
     adjusting = false
 }
 
@@ -141,27 +141,25 @@ end
 
 function Slots:spin_reel()
     for _, reel in pairs(Slots.reels) do
-        bottom = reel.y + 23
         for _, sym in pairs(reel.symbols) do
-            // TODO: fix this so symbols are evenly spaced
-            if sym[3] > #reel.symbols * 7 then
-                sym[3] = reel.y-8
+            if sym[3] > (#reel.symbols*7) then
+                sym[3] = reel.y-7
             else
                 sym[3] += 2
             end
-            pq(reel.symbols)
             if Slots.remaining_spins == 1 then
                 for _, scline in pairs(reel.scoring_lines) do
                     diff = abs(sym[3]-scline)
                     if self.closest_scline == nil or diff < abs(self.closest_sym-self.closest_scline) then
                         self.closest_scline = scline
-                        self.closest_sym = sym[3]
+                        self.closest_sym = sym[3]+4  -- we want the middle of the symbol
                     end
                 end
                 Slots.adjusting = true
             end
         end
     end
+    pq(Slots.reels[1].symbols)
     Slots.remaining_spins -= 1
 end
 
@@ -170,15 +168,19 @@ function Slots:adjust_reels()
     if self.closest_sym == self.closest_scline then
         self.adjusting = false
     else
-        for _, reel in pairs(Slots.reels) do
-            for _, sym in pairs(reel.symbols) do
-                if self.closest_sym > self.closest_scline then
-                    self.closest_sym -= 1
+        if self.closest_sym > self.closest_scline then
+            for _, reel in pairs(Slots.reels) do
+                for _, sym in pairs(reel.symbols) do
                     sym[3] -= 1
-                elseif self.closest_sym < self.closest_scline then
-                    self.closest_sym += 1
+                end
+                self.closest_sym -= 1
+            end
+        elseif self.closest_sym < self.closest_scline then
+            for _, reel in pairs(Slots.reels) do
+                for _, sym in pairs(reel.symbols) do
                     sym[3] += 1
                 end
+                self.closest_sym += 1
             end
         end
     end
