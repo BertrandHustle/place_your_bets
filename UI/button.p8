@@ -4,8 +4,8 @@ Button = {
     sprite_val = 0, 
     x = 0,
     y = 0,
-	w = 0,
-    h = 0,
+	w = 1,
+    h = 1,
 }
 
 
