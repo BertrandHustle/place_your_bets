@@ -119,7 +119,7 @@ function Slots:build_reel(x, y, height)
     end
     -- add symbols
 
-    symbol_pool = {{}*7}
+    symbol_pool = {}
     for _,sym in pairs(Slots.symbols.common) do
         for i=1, 2 do
             add(symbol_pool, sym)
@@ -147,6 +147,10 @@ function Slots:build_reel(x, y, height)
     -- symbol = Slots:copy_symbol(rnd(Slots.symbols.rare))
     -- symbol[3] = y + y_inc
     -- add(symbols, symbol)
+
+    for i=1, #symbol_pool do
+        ix = rnd(symbol_pool)
+    end
 
     return Reel:new(symbols, scoring_lines, x, y, height)
 end
