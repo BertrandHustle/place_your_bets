@@ -111,33 +111,43 @@ end
 function Slots:build_reel(x, y, height)
     -- add scoring lines
     scoring_lines = {}
-    pq(y)
-    pq(height)
     sc_line_dist = (height+y-5)/(Slots.scoring_lines)
-    pq(sc_line_dist)
     line_y = y + sc_line_dist
     for i=1, Slots.scoring_lines, 1 do
         add(scoring_lines, line_y)
         line_y += sc_line_dist
     end
     -- add symbols
+
+    symbol_pool = {{}*7}
+    for _,sym in pairs(Slots.symbols.common) do
+        for i=1, 2 do
+            add(symbol_pool, sym)
+        end
+    end
+    for i=1, 3 do
+        add(symbol_pool, symbols.uncommon[1])
+    end
+    add(symbol_pool, symbols.rare[1])
+
     symbols = {}
     y_inc = 0
-    for i=1, 4 do 
-        symbol = Slots:copy_symbol(rnd(Slots.symbols.common))
-        symbol[3] = y + y_inc
-        add(symbols, symbol)
-        y_inc += 10
-    end
-    for i=1, 2 do 
-        symbol = Slots:copy_symbol(rnd(Slots.symbols.uncommon))
-        symbol[3] = y + y_inc
-        add(symbols, symbol)
-        y_inc += 10
-    end
-    symbol = Slots:copy_symbol(rnd(Slots.symbols.rare))
-    symbol[3] = y + y_inc
-    add(symbols, symbol)
+    -- for i=1, 4 do 
+    --     symbol = Slots:copy_symbol(rnd(Slots.symbols.common))
+        
+    --     add(symbols, symbol)
+    --     y_inc += 10
+    -- end
+    -- for i=1, 2 do 
+    --     symbol = Slots:copy_symbol(rnd(Slots.symbols.uncommon))
+    --     symbol[3] = y + y_inc
+    --     add(symbols, symbol)
+    --     y_inc += 10
+    -- end
+    -- symbol = Slots:copy_symbol(rnd(Slots.symbols.rare))
+    -- symbol[3] = y + y_inc
+    -- add(symbols, symbol)
+
     return Reel:new(symbols, scoring_lines, x, y, height)
 end
 
