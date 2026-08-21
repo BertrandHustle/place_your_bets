@@ -119,40 +119,40 @@ function Slots:build_reel(x, y, height)
     end
     -- add symbols
 
-    symbol_pool = {}
+    symbols = {}
     for _,sym in pairs(Slots.symbols.common) do
         for i=1, 2 do
-            add(symbol_pool, sym)
+            add(symbols, Slots:copy_symbol(sym))
         end
     end
-    for i=1, 3 do
-        add(symbol_pool, symbols.uncommon[1])
+    for _,sym in pairs(Slots.symbols.uncommon) do
+        for i=1, 3 do
+            add(symbols, Slots:copy_symbol(sym))
+        end
     end
-    add(symbol_pool, symbols.rare[1])
+    add(symbols, Slots:copy_symbol(Slots.symbols.rare[1]))
 
-    symbols = {}
+    pq('NEW')
+
+    ix_val_pairs = {}
+    rnd_syms = {}
+    for i, v in ipairs(symbols) do
+        add(ix_val_pairs, {i,v})
+    end
     y_inc = 0
-    -- for i=1, 4 do 
-    --     symbol = Slots:copy_symbol(rnd(Slots.symbols.common))
-        
-    --     add(symbols, symbol)
-    --     y_inc += 10
-    -- end
-    -- for i=1, 2 do 
-    --     symbol = Slots:copy_symbol(rnd(Slots.symbols.uncommon))
-    --     symbol[3] = y + y_inc
-    --     add(symbols, symbol)
-    --     y_inc += 10
-    -- end
-    -- symbol = Slots:copy_symbol(rnd(Slots.symbols.rare))
-    -- symbol[3] = y + y_inc
-    -- add(symbols, symbol)
-
-    for i=1, #symbol_pool do
-        ix = rnd(symbol_pool)
+    pq(ix_val_pairs)
+    for i=0, #ix_val_pairs do
+        ix_val = rnd(ix_val_pairs)
+        ix_val[2][3] = y_inc
+        add(rnd_syms, ix_val[2])
+        deli(ix_val_pairs, ix_val[1])
+        y_inc += 10
     end
 
-    return Reel:new(symbols, scoring_lines, x, y, height)
+
+    pq(rnd_syms)
+
+    return Reel:new(rnd_syms, scoring_lines, x, y, height)
 end
 
 
@@ -176,7 +176,6 @@ function Slots:spin_reel()
             end
         end
     end
-    pq(Slots.reels[1].symbols)
     Slots.remaining_spins -= 1
 end
 

@@ -8,7 +8,6 @@ selected_square = nil
 frames = 0
 
 function _init()
-	pq('init')
 	cls()
 	Slots:init()
 	turtle_square = Turtle:init()
