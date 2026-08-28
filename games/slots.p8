@@ -132,25 +132,19 @@ function Slots:build_reel(x, y, height)
     end
     add(symbols, Slots:copy_symbol(Slots.symbols.rare[1]))
 
-    pq('NEW')
-
-    ix_val_pairs = {}
+    input_syms = {}
     rnd_syms = {}
-    for i, v in ipairs(symbols) do
-        add(ix_val_pairs, {i,v})
+    for _,s in pairs(symbols) do
+        add(input_syms, s)
     end
     y_inc = 0
-    pq(ix_val_pairs)
-    for i=0, #ix_val_pairs do
-        ix_val = rnd(ix_val_pairs)
-        ix_val[2][3] = y_inc
-        add(rnd_syms, ix_val[2])
-        deli(ix_val_pairs, ix_val[1])
+    while(#input_syms>0) do
+        sym = rnd(input_syms)
+        sym[3] = y_inc
+        add(rnd_syms, sym)
+        del(input_syms, sym)
         y_inc += 10
     end
-
-
-    pq(rnd_syms)
 
     return Reel:new(rnd_syms, scoring_lines, x, y, height)
 end
