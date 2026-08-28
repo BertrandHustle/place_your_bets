@@ -8,8 +8,11 @@ selected_square = nil
 frames = 0
 
 function _init()
+	pq('NEW')
 	cls()
 	Slots:init()
+	pq(Slots.reels)
+	pq(#Slots.reels[1].symbols*7)
 	turtle_square = Turtle:init()
 	gs3 = GameSquare:new({}, 2, 1, 64, {}, 64, 0, 'test3', 60)
 	gs4 = GameSquare:new({}, 2, 2, 64, {}, 64, 64, 'test4', 60)

@@ -145,18 +145,16 @@ function Slots:build_reel(x, y, height)
         del(input_syms, sym)
         y_inc += 10
     end
-
     return Reel:new(rnd_syms, scoring_lines, x, y, height)
 end
-
 
 function Slots:spin_reel()
     for _, reel in pairs(Slots.reels) do
         for _, sym in pairs(reel.symbols) do
-            if sym[3] > #reel.symbols*7 then
+            if sym[3] > #reel.symbols*10 then
                 sym[3] = reel.y-7
             else
-                sym[3] += 2
+                sym[3] += 1
             end
             if Slots.remaining_spins == 1 then
                 for _, scline in pairs(reel.scoring_lines) do
@@ -170,6 +168,7 @@ function Slots:spin_reel()
             end
         end
     end
+    pq(Slots.reels)
     Slots.remaining_spins -= 1
 end
 

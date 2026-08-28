@@ -45,21 +45,6 @@ function get_spr_coords(sp)
     return sx, sy
 end
 
-
-function shuffle(tbl)
-    ix_vals = {}
-    rnd_vals = {}
-    for i, v in ipairs(tbl) do
-        add(ix_vals, {i,v})
-    end
-    for _,i in pairs(ix_vals) do
-        ix_val = rnd(ix_vals)
-        add(rnd_vals, ix_val[2])
-        del(tbl[ix_val[1]])
-    end
-    return rnd_vals
-end
-
 -- function gamesquare_lookup_by_name(name, gq_rows)
 --     for _, row in pairs(gq_rows) do 
 --         for _, gq in pairs(row) do
