@@ -111,7 +111,7 @@ end
 function Slots:build_reel(x, y, height)
     -- add scoring lines
     scoring_lines = {}
-    sc_line_dist = (height+y-5)/(Slots.scoring_lines)
+    sc_line_dist = flr((height+y-5)/(Slots.scoring_lines) + 0.5)
     line_y = y + sc_line_dist
     for i=1, Slots.scoring_lines, 1 do
         add(scoring_lines, line_y)
@@ -152,9 +152,9 @@ function Slots:spin_reel()
     for _, reel in pairs(Slots.reels) do
         for _, sym in pairs(reel.symbols) do
             if sym[3] > #reel.symbols*10 then
-                sym[3] = reel.y-7
+                sym[3] = reel.y-9
             else
-                sym[3] += 1
+                sym[3] += 3
             end
             if Slots.remaining_spins == 1 then
                 for _, scline in pairs(reel.scoring_lines) do
@@ -168,7 +168,6 @@ function Slots:spin_reel()
             end
         end
     end
-    pq(Slots.reels)
     Slots.remaining_spins -= 1
 end
 
@@ -182,19 +181,17 @@ function Slots:adjust_reels()
                 for _, sym in pairs(reel.symbols) do
                     sym[3] -= 1
                 end
-                self.closest_sym -= 1
             end
+            self.closest_sym -= 1
         elseif self.closest_sym < self.closest_scline then
             for _, reel in pairs(Slots.reels) do
                 for _, sym in pairs(reel.symbols) do
                     sym[3] += 1
-                end
-                self.closest_sym += 1
+                end 
             end
+            self.closest_sym += 1
         end
     end
-    self.closest_sym = nil 
-    self.closest_scline = nil
 end
 
 
