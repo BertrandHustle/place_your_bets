@@ -21,8 +21,9 @@ Slots = {
     reels = {},
     rows = 1,
     remaining_spins = 0,
-    scoring_lines = 3,
+    num_sclines = 3,
     spin_seconds = 60,
+    spin_speed = 3,
     adjusting = false
 }
 
@@ -39,7 +40,7 @@ end
 function Reel:render()
     -- draw walls
     top = self.y
-    bottom = self.y+36
+    bottom = self.y+self.height
     rect(self.x-8, top, self.x-8, bottom, 6)
     rect(self.x+8, top, self.x+8, bottom, 6)
     -- draw lines
@@ -111,9 +112,9 @@ end
 function Slots:build_reel(x, y, height)
     -- add scoring lines
     scoring_lines = {}
-    sc_line_dist = flr((height+y-5)/(Slots.scoring_lines) + 0.5)
-    line_y = y + sc_line_dist
-    for i=1, Slots.scoring_lines, 1 do
+    sc_line_dist = height/Slots.num_sclines 
+    line_y = y + sc_line_dist/2
+    for i=1, Slots.num_sclines do
         add(scoring_lines, line_y)
         line_y += sc_line_dist
     end
@@ -137,28 +138,32 @@ function Slots:build_reel(x, y, height)
     for _,s in pairs(symbols) do
         add(input_syms, s)
     end
-    y_inc = 0
+    med_sym = flr(#input_syms/2)
+    y_inc = -(sc_line_dist * med_sym)
+    pq(y_inc)
     while(#input_syms>0) do
         sym = rnd(input_syms)
-        sym[3] = y_inc
+        sym[3] = y_inc - 4
         add(rnd_syms, sym)
         del(input_syms, sym)
-        y_inc += 10
+        y_inc += sc_line_dist
     end
     return Reel:new(rnd_syms, scoring_lines, x, y, height)
 end
 
+
 function Slots:spin_reel()
+    speed = Slots.spin_speed
     for _, reel in pairs(Slots.reels) do
         for _, sym in pairs(reel.symbols) do
-            if sym[3] > #reel.symbols*10 then
-                sym[3] = reel.y-9
-            else
-                sym[3] += 3
+            sym[3] += speed
+            if sym[3] > reel.height - 1 then
+                sym[3] = reel.y - reel.y*3
             end
             if Slots.remaining_spins == 1 then
                 for _, scline in pairs(reel.scoring_lines) do
                     diff = abs(sym[3]-scline)
+                    -- TODO: why is closest_sym not getting set first?
                     if self.closest_scline == nil or diff < abs(self.closest_sym-self.closest_scline) then
                         self.closest_scline = scline
                         self.closest_sym = sym[3]+4  -- we want the middle of the symbol
@@ -175,6 +180,7 @@ end
 function Slots:adjust_reels()
     if self.closest_sym == self.closest_scline then
         self.adjusting = false
+        pq(self.reels)
     else
         if self.closest_sym > self.closest_scline then
             for _, reel in pairs(Slots.reels) do
@@ -198,7 +204,7 @@ end
 function Slots:init()
     x = 10
     y = 10
-    height = 24
+    height = 36
     for i=1, Slots.num_reels do
         add(Slots.reels, Slots:build_reel(x, y, height))
         x += 16

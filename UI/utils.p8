@@ -54,3 +54,11 @@ end
 --         end
 --     end
 -- end
+
+-- function max_in_table(int_table)
+--     max_int = 0
+--     for i=1, #int_table-1 do
+--         max_int = max(int_table[i], int_table[1+1]
+--     end
+--     return max_int
+-- end
