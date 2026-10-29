@@ -17,6 +17,8 @@ Slots = {
     },
     closest_scline = nil,
     closest_sym = nil,
+    low_y_sym = nil,  --lowest y value a symbol can be on a reel
+    high_y_sym = nil,
     num_reels = 3,
     reels = {},
     rows = 1,
@@ -140,7 +142,7 @@ function Slots:build_reel(x, y, height)
     end
     med_sym = flr(#input_syms/2)
     y_inc = -(sc_line_dist * med_sym)
-    pq(y_inc)
+    low_y_sym = y_inc
     while(#input_syms>0) do
         sym = rnd(input_syms)
         sym[3] = y_inc - 4
@@ -148,17 +150,17 @@ function Slots:build_reel(x, y, height)
         del(input_syms, sym)
         y_inc += sc_line_dist
     end
+    high_y_sym = y_inc
     return Reel:new(rnd_syms, scoring_lines, x, y, height)
 end
-
 
 function Slots:spin_reel()
     speed = Slots.spin_speed
     for _, reel in pairs(Slots.reels) do
         for _, sym in pairs(reel.symbols) do
             sym[3] += speed
-            if sym[3] > reel.height - 1 then
-                sym[3] = reel.y - reel.y*3
+            if sym[3] > high_y_sym - 1 then
+                sym[3] = low_y_sym
             end
             if Slots.remaining_spins == 1 then
                 for _, scline in pairs(reel.scoring_lines) do
@@ -175,7 +177,6 @@ function Slots:spin_reel()
     end
     Slots.remaining_spins -= 1
 end
-
 
 function Slots:adjust_reels()
     if self.closest_sym == self.closest_scline then
