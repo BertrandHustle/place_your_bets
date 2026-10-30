@@ -15,8 +15,6 @@ Slots = {
             {25, 100}  --seven
         }
     },
-    closest_scline = nil,
-    closest_sym = nil,
     low_y_sym = nil,  --lowest y value a symbol can be on a reel
     high_y_sym = nil,
     num_reels = 3,
@@ -33,8 +31,8 @@ Slots = {
 Reel={}
 
 
-function Reel:new(symbols, scoring_lines, x, y, height)
-	local obj = {symbols=symbols, scoring_lines=scoring_lines, x=x, y=y, height=height}
+function Reel:new(start_delay, symbols, scoring_lines, x, y, height)
+	local obj = {start_delay=start_delay, symbols=symbols, scoring_lines=scoring_lines, x=x, y=y, height=height}
 	return setmetatable(obj, {__index = self})
 end
 
@@ -98,7 +96,6 @@ function Slots:payout()
     player.money += winnings
     slots_square.current_bet = 0 
     Slots.facing_symbols = {}
-    Slots.spinning = false
 end
 
 
@@ -111,7 +108,7 @@ function Slots:copy_symbol(sym)
 end
 
 
-function Slots:build_reel(x, y, height)
+function Slots:build_reel(x, y, height, delay)
     -- add scoring lines
     scoring_lines = {}
     sc_line_dist = height/Slots.num_sclines 
@@ -151,53 +148,64 @@ function Slots:build_reel(x, y, height)
         y_inc += sc_line_dist
     end
     high_y_sym = y_inc
-    return Reel:new(rnd_syms, scoring_lines, x, y, height)
+    return Reel:new(delay, rnd_syms, scoring_lines, x, y, height)
 end
 
-function Slots:spin_reel()
+
+function Slots:spin_reels()
     speed = Slots.spin_speed
-    for _, reel in pairs(Slots.reels) do
-        for _, sym in pairs(reel.symbols) do
-            sym[3] += speed
-            if sym[3] > high_y_sym - 1 then
-                sym[3] = low_y_sym
-            end
-            if Slots.remaining_spins == 1 then
-                for _, scline in pairs(reel.scoring_lines) do
-                    diff = abs(sym[3]-scline)
-                    -- TODO: why is closest_sym not getting set first?
-                    if self.closest_scline == nil or diff < abs(self.closest_sym-self.closest_scline) then
-                        self.closest_scline = scline
-                        self.closest_sym = sym[3]+4  -- we want the middle of the symbol
-                    end
+    for ix, reel in pairs(Slots.reels) do
+        if reel.start_delay <= 0 do
+            for _, sym in pairs(reel.symbols) do
+                sym[3] += speed
+                if sym[3] > high_y_sym - 1 then
+                    sym[3] = low_y_sym
                 end
-                Slots.adjusting = true
+                if Slots.remaining_spins == 1 then
+                    for _, scline in pairs(reel.scoring_lines) do
+                        diff = abs(sym[3]-scline)
+                        -- TODO: why is closest_sym not getting set first?
+                        if reel.closest_scline == nil or diff < abs(reel.closest_sym-reel.closest_scline) then
+                            reel.closest_scline = scline
+                            reel.closest_sym = sym[3]+4  -- we want the middle of the symbol
+                        end
+                    end
+                    Slots.adjusting = true
+                end
             end
+        else
+            reel.start_delay -= 1
         end
     end
     Slots.remaining_spins -= 1
 end
 
+
 function Slots:adjust_reels()
-    if self.closest_sym == self.closest_scline then
-        self.adjusting = false
-        pq(self.reels)
-    else
-        if self.closest_sym > self.closest_scline then
-            for _, reel in pairs(Slots.reels) do
+    adjust = {}
+    for _, reel in pairs(Slots.reels) do
+        if reel.closest_sym == reel.closest_scline then
+            add(adjusting, false)
+        else
+            add(adjusting, true)
+            if reel.closest_sym > reel.closest_scline then
                 for _, sym in pairs(reel.symbols) do
                     sym[3] -= 1
                 end
-            end
-            self.closest_sym -= 1
-        elseif self.closest_sym < self.closest_scline then
-            for _, reel in pairs(Slots.reels) do
+                reel.closest_sym -= 1
+            elseif reel.closest_sym < reel.closest_scline then
                 for _, sym in pairs(reel.symbols) do
                     sym[3] += 1
                 end 
+                reel.closest_sym += 1
             end
-            self.closest_sym += 1
         end
+    end
+    for _,val in pairs(adjust) do
+        if val do
+            return
+        end
+        self.adjusting = false
     end
 end
 
@@ -207,7 +215,7 @@ function Slots:init()
     y = 10
     height = 36
     for i=1, Slots.num_reels do
-        add(Slots.reels, Slots:build_reel(x, y, height))
+        add(Slots.reels, Slots:build_reel(x, y, height, i))
         x += 16
     end
 end
@@ -216,7 +224,6 @@ end
 function Slots:start_reels()
     if (slots_square.current_bet > 0) then
         Slots.remaining_spins = Slots.spin_seconds
-        Slots.spinning = true
     end
 end
 

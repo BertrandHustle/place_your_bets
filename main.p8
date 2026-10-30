@@ -11,7 +11,6 @@ function _init()
 	cls()
 	pq('NEW')
 	Slots:init()
-	pq(Slots.reels)
 	turtle_square = Turtle:init()
 	gs3 = GameSquare:new({}, 2, 1, 64, {}, 64, 0, 'test3', 60)
 	gs4 = GameSquare:new({}, 2, 2, 64, {}, 64, 64, 'test4', 60)
@@ -70,7 +69,7 @@ function _draw()
 	end
 
 	if Slots.remaining_spins > 0 then
-		Slots:spin_reel()
+		Slots:spin_reels()
 	elseif Slots.adjusting == true then
 		Slots:adjust_reels()
 	end
