@@ -148,7 +148,9 @@ function Slots:build_reel(x, y, height, delay)
         y_inc += sc_line_dist
     end
     high_y_sym = y_inc
-    return Reel:new(delay, rnd_syms, scoring_lines, x, y, height)
+    reel = Reel:new(delay, rnd_syms, scoring_lines, x, y, height)
+    reel.init_delay = delay
+    return reel
 end
 
 
@@ -186,6 +188,8 @@ function Slots:adjust_reels()
     for _, reel in pairs(Slots.reels) do
         if reel.closest_sym == reel.closest_scline then
             add(adjust, false)
+            reel.start_delay = reel.init_delay
+            reel.closest_scline, reel.closest_sym = nil
         else
             add(adjust, true)
             if reel.closest_sym > reel.closest_scline then
@@ -215,7 +219,7 @@ function Slots:init()
     y = 10
     height = 36
     for i=1, Slots.num_reels do
-        add(Slots.reels, Slots:build_reel(x, y, height, i))
+        add(Slots.reels, Slots:build_reel(x, y, height, i*2))
         x += 16
     end
 end
