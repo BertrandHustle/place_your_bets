@@ -185,9 +185,9 @@ function Slots:adjust_reels()
     adjust = {}
     for _, reel in pairs(Slots.reels) do
         if reel.closest_sym == reel.closest_scline then
-            add(adjusting, false)
+            add(adjust, false)
         else
-            add(adjusting, true)
+            add(adjust, true)
             if reel.closest_sym > reel.closest_scline then
                 for _, sym in pairs(reel.symbols) do
                     sym[3] -= 1
@@ -202,11 +202,11 @@ function Slots:adjust_reels()
         end
     end
     for _,val in pairs(adjust) do
-        if val do
+        if val == true do
             return
         end
-        self.adjusting = false
     end
+    self.adjusting = false
 end
 
 
