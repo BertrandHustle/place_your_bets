@@ -1,5 +1,4 @@
 Slots = {
-    facing_symbols = {},
     symbols = {
         common = {
             -- spr, val, y
@@ -19,7 +18,6 @@ Slots = {
     high_y_sym = nil,
     num_reels = 3,
     reels = {},
-    rows = 1,
     remaining_spins = 0,
     num_sclines = 3,
     spin_seconds = 60,
@@ -84,18 +82,49 @@ end
 
 
 function Slots:payout()
-    prev_symbol = nil
-    for _, symbol in pairs(Slots.facing_symbols) do
-        if prev_symbol and prev_symbol != symbol then
-            return 0
-        end
-        prev_symbol = symbol
+
+    scoring_symbols = {}
+
+    for i=1,Slots.num_sclines do
+        scoring_symbols[i]={}
     end
-    slots_square:set_win()
-    winnings = Slots.payout() * Slots.facing_symbols[1][2]
-    player.money += winnings
+
+    for _,reel in pairs(Slots.reels) do
+        reel.start_delay = reel.init_delay
+        reel.closest_scline, reel.closest_sym = nil
+        for i,scline in pairs(reel.scoring_lines) do
+            for _,sym in pairs(reel.symbols) do
+                if sym[3]+4 == scline then
+                    add(scoring_symbols[i], sym)
+                end
+            end
+        end
+    end
+
+    pq(scoring_symbols)
+
+    win_val = 0
+    
+    for _,line in pairs(scoring_symbols) do
+        prev_sym = nil
+        for ix,sym in pairs(line) do
+            if prev_sym and prev_sym != sym[2] then
+                break
+            end
+            prev_sym = sym[2]
+            if ix == Slots.num_reels then
+                win_val += sym[2]
+            end
+        end
+    end
+
     slots_square.current_bet = 0 
-    Slots.facing_symbols = {}
+
+    if win_val > 0 then
+        slots_square:set_win()
+        winnings = slots_square.current_bet * win_val
+        player.money += winnings
+    end
 end
 
 
@@ -188,8 +217,6 @@ function Slots:adjust_reels()
     for _, reel in pairs(Slots.reels) do
         if reel.closest_sym == reel.closest_scline then
             add(adjust, false)
-            reel.start_delay = reel.init_delay
-            reel.closest_scline, reel.closest_sym = nil
         else
             add(adjust, true)
             if reel.closest_sym > reel.closest_scline then
@@ -211,6 +238,7 @@ function Slots:adjust_reels()
         end
     end
     self.adjusting = false
+    self.payout()
 end
 
 
